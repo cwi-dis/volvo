@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Spark Demo</title>
+
+  <style>
+    .label {
+      font-family:Helvetica, Arial, sans-serif;
+      font-size:32pt;
+    }
+
+    .bar {
+      height:30px;
+      background-color:#555555;
+      margin:10px;
+    }
+  </style>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script type="text/javascript">
+    // Maximum bar width in pixels
+    var BAR_WIDTH = 900;
+    // Access token
+    var TOKEN = "fcd299e67b640c8d2f2cd1a493e9a3095c61afe0";
+
+    $(document).ready(function () {
+      var makeRequest = function () {
+        $.get("https://api.particle.io/v1/devices/240023001547343339383037/pressures?access_token=" + TOKEN, function (data) {
+          // Split response text by commas
+          var result = data.result.split(",");
+
+          // Print the time the response was received
+          $("#time").text(new Date());
+
+          // Assign one of the results values to each label
+          $(".label").each(function (i) {
+            $(this).text(result[i]);
+          });
+
+          // Use result values as widths for the divs
+          $(".bar").each(function (i) {
+            $(this).width(BAR_WIDTH/4096 * result[i]);
+          });
+
+          // Launch new request recursively
+          makeRequest();
+        });
+      };
+
+      // Kick off first GET request
+      makeRequest();
+    });
+  </script>
+</head>
+<body>
+  <p id="time"></p>
+
+  <h1 class="label"></h1>
+  <h1 class="label"></h1>
+  <h1 class="label"></h1>
+  <h1 class="label"></h1>
+
+  <div class="bar"></div>
+  <div class="bar"></div>
+  <div class="bar"></div>
+  <div class="bar"></div>
+</body>
+</html>
