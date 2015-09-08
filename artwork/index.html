@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+
+    <style>
+        .svgcontainer {
+            width:49%;
+            float:left;
+        }
+    </style>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var perspectivePromise = new Promise(function (resolve, reject) {
+                $("#perspective").load("byborre_volvo_perspective.svg", function () {
+                    resolve();
+                });
+            });
+
+            var planPromise = new Promise(function (resolve, reject) {
+                $("#plan").load("byborre_volvo_plan.svg", function () {
+                    resolve();
+                });
+            });
+
+            var svgsLoaded = Promise.all([perspectivePromise, planPromise]);
+
+            svgsLoaded.then(function () {
+                var lightness = 60;
+                var id = 1;
+
+                var interval = setInterval(function () {
+                    $(".polygon").attr("fill", "none");
+
+                    $(".perspective#polygon_" + id).attr("fill", "hsla(60, 100%, " + lightness + "%, 1)");
+                    $(".plan#polygon_" + id).attr("fill", "hsla(60, 100%, " + lightness + "%, 1)");
+
+                    id += 1;
+
+                    if (id > 36) {
+                        id = 1;
+                    }
+                }, 500);
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="svgcontainer" id="perspective">
+    </div>
+    <div class="svgcontainer" id="plan">
+    </div>
+</body>
+</html>
