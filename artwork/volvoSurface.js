@@ -6,7 +6,7 @@ function VolvoSurface(svgMappings) {
             var promise = new Promise(function (resolve, reject) {
                 $(key).load(svgMappings[key], function (res, status) {
                     if (status == 'error') {
-                        reject()
+                        reject();
                     } else {
                         resolve();
                     }
@@ -19,7 +19,7 @@ function VolvoSurface(svgMappings) {
 
     this.loaded = function (callback) {
         Promise.all(this.promises).then(callback);
-    }
+    };
 }
 
 (function ($) {
@@ -28,10 +28,14 @@ function VolvoSurface(svgMappings) {
 
         jq.lightness = function (baseColor, lightness) {
             $(this).attr("fill", "hsla(" + baseColor + ", 100%, " + lightness + "%, 1)");
-        }
+        };
 
-        return jq
-    }
+        jq.getDOMNode = function () {
+            return $(this).get(0);
+        };
+
+        return jq;
+    };
 
     $.fn.polygons = function (id) {
         return $(this).find(".polygon");
