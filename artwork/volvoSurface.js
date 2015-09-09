@@ -38,6 +38,12 @@ function VolvoSurface(svgMappings) {
     };
 
     $.fn.polygons = function (id) {
-        return $(this).find(".polygon");
-    }
+        var jq = $(this).find(".polygon");
+
+        jq.lightness = function (baseColor, lightness) {
+            $(this).attr("fill", "hsla(" + baseColor + ", 100%, " + lightness + "%, 1)");
+        };
+
+        return jq;
+    };
 }(jQuery));
