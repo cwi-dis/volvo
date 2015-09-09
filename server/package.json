@@ -1,0 +1,31 @@
+{
+  "name": "sensor-relay",
+  "version": "1.0.0",
+  "description": "Server application with relays data from hardware sensors to browser clients using websockets based on a publish-subscribe model.",
+  "main": "app/app.js",
+  "scripts": {
+    "start": "node app/app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "sensor",
+    "relay",
+    "websocket",
+    "pubsub"
+  ],
+  "dependencies": {
+    "colors": "*",
+    "commander": "^2.8.1",
+    "express": "*",
+    "serve-static": "*",
+    "ws": "*"
+  },
+  "author": "Thomas Röggla",
+  "license": "BSD",
+  "devDependencies": {
+    "gulp": "^3.8.11",
+    "gulp-concat": "^2.5.2",
+    "gulp-react": "^3.0.1",
+    "gulp-uglify": "^1.2.0"
+  }
+}

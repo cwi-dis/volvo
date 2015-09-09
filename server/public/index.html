@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+
+    <style>
+        .svgcontainer {
+            width:49%;
+            float:left;
+        }
+    </style>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+    <script type="text/javascript" src="js/relay-client.js"></script>
+    <script type="text/javascript" src="js/volvoSurface.js"></script>
+    <script type="text/javascript">
+        function remapValue(val) {
+            return 100 - (50 / 1000 * val);
+        };
+
+        $(document).ready(function () {
+            var volvoSurface = new VolvoSurface({
+                "#perspective": "img/byborre_volvo_perspective.svg",
+                "#plan": "img/byborre_volvo_plan.svg"
+            });
+
+            volvoSurface.loaded(function () {
+                var host = window.location.hostname;
+                var relay = new RelayClient("ws://" + host + ":23148");
+
+                relay.subscribe('pressure', function (values) {
+                    for (var key in values) {
+                        if (values.hasOwnProperty(key)) {
+                            lightness = remapValue(values[key]);
+
+                            $("#perspective").polygon(key).lightness(60, lightness);
+                            $("#plan").polygon(key).lightness(60, lightness);
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="svgcontainer" id="perspective">
+    </div>
+    <div class="svgcontainer" id="plan">
+    </div>
+</body>
+</html>
