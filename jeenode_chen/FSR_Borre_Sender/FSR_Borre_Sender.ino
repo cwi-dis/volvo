@@ -20,8 +20,9 @@ Port ldr_2 (2);//setup Jeenode V6 using Port2
 
 typedef struct {
   byte node;
- byte data_1; 
- byte data_2;
+  
+  byte data_1; 
+  byte data_2;
   byte data_3; 
   byte data_4; 
 } Payload;
@@ -30,23 +31,20 @@ Payload payload;
 
 void setup () {
   Serial.begin(57600);
-  Serial.print("\n[pollee]");
   // use the node ID previously stored in EEPROM by RF12demo
   payload.node = rf12_config();
 }
 
 void loop () {
   // wait for an incoming empty packet for us
-  if (rf12_recvDone() && rf12_crc == 0 && rf12_len == 0 && RF12_WANTS_ACK) 
-  {
-    // invent some data to send back
-    //payload.time = millis();
-   payload.data_1 = ldr_1.anaRead();
-   payload.data_2 = ldr_2.anaRead();
+  if (rf12_recvDone() && rf12_crc == 0 && rf12_len == 0 && RF12_WANTS_ACK) {
+    // read data from the analog pins and store it into the payload struct
+    payload.data_1 = ldr_1.anaRead();
+    payload.data_2 = ldr_2.anaRead();
     payload.data_3 = ldr_3.anaRead();
-   payload.data_4 = ldr_4.anaRead();
-    // start transmission
-    rf12_sendStart(RF12_ACK_REPLY, &payload, sizeof payload);
+    payload.data_4 = ldr_4.anaRead();
     
+    // start transmission
+    rf12_sendStart(RF12_ACK_REPLY, &payload, sizeof payload);  
   }
 }
