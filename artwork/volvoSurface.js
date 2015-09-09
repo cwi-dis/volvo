@@ -26,7 +26,9 @@ function VolvoSurface(svgMappings) {
     $.fn.polygon = function (id) {
         var jq = {};
 
-        if (id instanceof Array) {
+        if (id === undefined) {
+            jq = $(this).find(".polygon");
+        } else if (id instanceof Array) {
             var selector = id.map(function (i) {
                 return "#polygon_" + i;
             });
@@ -42,16 +44,6 @@ function VolvoSurface(svgMappings) {
 
         jq.getDOMNode = function () {
             return $(this).get(0);
-        };
-
-        return jq;
-    };
-
-    $.fn.polygons = function (id) {
-        var jq = $(this).find(".polygon");
-
-        jq.lightness = function (baseColor, lightness) {
-            $(this).attr("fill", "hsla(" + baseColor + ", 100%, " + lightness + "%, 1)");
         };
 
         return jq;
