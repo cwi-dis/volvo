@@ -11,31 +11,24 @@
     </style>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script type="text/javascript" src="volvoSurface.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
-            var perspectivePromise = new Promise(function (resolve, reject) {
-                $("#perspective").load("byborre_volvo_perspective.svg", function () {
-                    resolve();
-                });
+            var volvoSurface = new VolvoSurface({
+                "#perspective": "byborre_volvo_perspective.svg",
+                "#plan": "byborre_volvo_plan.svg"
             });
 
-            var planPromise = new Promise(function (resolve, reject) {
-                $("#plan").load("byborre_volvo_plan.svg", function () {
-                    resolve();
-                });
-            });
-
-            var svgsLoaded = Promise.all([perspectivePromise, planPromise]);
-
-            svgsLoaded.then(function () {
+            volvoSurface.loaded(function () {
                 var lightness = 60;
                 var id = 1;
 
                 var interval = setInterval(function () {
-                    $(".polygon").attr("fill", "none");
+                    $("#perspective").polygons().attr("fill", "none");
+                    $("#perspective").polygon(id).lightness(60, lightness);
 
-                    $(".perspective#polygon_" + id).attr("fill", "hsla(60, 100%, " + lightness + "%, 1)");
-                    $(".plan#polygon_" + id).attr("fill", "hsla(60, 100%, " + lightness + "%, 1)");
+                    $("#plan").polygons().attr("fill", "none");
+                    $("#plan").polygon(id).lightness(60, lightness);
 
                     id += 1;
 
