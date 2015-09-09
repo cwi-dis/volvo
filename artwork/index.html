@@ -20,22 +20,24 @@
             });
 
             volvoSurface.loaded(function () {
-                var lightness = 60;
-                var id = 1;
+                var lightness = 50;
+                var offset = 1;
+                var id = [1, 10, 15, 20, 25, 30, 35];
 
                 var interval = setInterval(function () {
-                    $("#perspective").polygons().attr("fill", "none");
                     $("#perspective").polygon(id).lightness(60, lightness);
-
-                    $("#plan").polygons().attr("fill", "none");
                     $("#plan").polygon(id).lightness(60, lightness);
 
-                    id += 1;
+                    lightness += offset;
 
-                    if (id > 36) {
-                        id = 1;
+                    if (lightness > 99) {
+                        offset = -1;
                     }
-                }, 500);
+
+                    if (lightness < 50) {
+                        offset = +1;
+                    }
+                }, 20);
             });
         });
     </script>
