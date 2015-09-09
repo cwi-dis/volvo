@@ -24,7 +24,17 @@ function VolvoSurface(svgMappings) {
 
 (function ($) {
     $.fn.polygon = function (id) {
-        var jq = $(this).find("#polygon_" + id);
+        var jq = {};
+
+        if (id instanceof Array) {
+            var selector = id.map(function (i) {
+                return "#polygon_" + i;
+            });
+
+            jq = $(this).find(selector.join(","));
+        } else {
+            jq = $(this).find("#polygon_" + id);
+        }
 
         jq.lightness = function (baseColor, lightness) {
             $(this).attr("fill", "hsla(" + baseColor + ", 100%, " + lightness + "%, 1)");
