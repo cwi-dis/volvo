@@ -39,7 +39,11 @@ function VolvoSurface(svgMappings) {
         }
 
         jq.lightness = function (baseColor, lightness) {
-            $(this).attr("fill", "hsla(" + baseColor + ", 100%, " + lightness + "%, 1)");
+            if (lightness === 100) {
+                $(this).attr("fill", "none");
+            } else {
+                $(this).attr("fill", "hsla(" + baseColor + ", 100%, " + lightness + "%, 0.7)");
+            }
         };
 
         jq.getDOMNode = function () {
