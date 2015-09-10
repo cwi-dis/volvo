@@ -41,7 +41,7 @@ def get_ws_host():
 
 
 if __name__ == "__main__":
-    port, ws_host, offset = "", "", 0
+    port, ws_host = "", ""
 
     if len(sys.argv) <= 2:
         port = get_portname()
