@@ -2,9 +2,17 @@ import json
 import sys
 import time
 
+from collections import defaultdict
 from sensorrelay import WebsocketPublisher
 from serial import Serial
 from serial.tools import list_ports
+
+buffers = defaultdict(float)
+
+
+def exp_average(i, n, alpha=0.2):
+    buffers[i] = (alpha * n) + (1.0 - alpha) * buffers[i]
+    return buffers[i]
 
 
 def get_portname():
@@ -51,7 +59,10 @@ if __name__ == "__main__":
         try:
             data = json.loads(result)
 
-            sys.stdout.write(str(time.time()) + " => " + result)
+            for key in data.keys():
+                data[key] = round(exp_average(key, data[key]), 2)
+
+            sys.stdout.write("%.2f => %s\n" % (time.time(), str(data)))
             sys.stdout.flush()
 
             pub.publish('pressure', data)
