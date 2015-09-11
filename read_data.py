@@ -55,6 +55,25 @@ def get_ws_host():
     return ws_host
 
 
+# Script for reading sensor data from a serial port and sending it to a PubSub
+# channel.
+#
+# If this script is launched without any parameters, it will ask you to choose
+# a serial device to read from and a WebSocket host to send the data to in the
+# format hostname:port.
+# These parameters however can also be passed in through the command line like
+# so:
+#
+#    $ python read_data.py /dev/cu.usbserial-A704FZK7 localhost:23148
+#
+# This will read the data from the serial device at /dev/cu.usbserial-A704FZK7,
+# process it and send it to the PubSub server located on localhost at port
+# 23148 (make sure to start the server first).
+#
+# Please note that in order for this script to work, you need to install
+# pyserial from PyPI and the sensorrelay package which can be found in the
+# DIS wearing-sense repository.
+
 if __name__ == "__main__":
     port, ws_host = "", ""
 
