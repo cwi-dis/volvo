@@ -1,40 +1,64 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title></title>
+    <title>Volvo Demo</title>
 
     <style>
+        /* Have each SVG container take up half of the screen and align them
+           horizontally next to each other ot the left. */
         .svgcontainer {
             width:49%;
             float:left;
         }
     </style>
 
+    <!-- Load jQuery from Google's CDN -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 
+    <!-- Include RelayClient for PubSub system -->
     <script type="text/javascript" src="js/relay-client.js"></script>
+    <!-- Include VolvoSurface for PubSub loading and modifying SVGs -->
     <script type="text/javascript" src="js/volvoSurface.js"></script>
     <script type="text/javascript">
         function remapValue(val) {
             return 100 - (50 / 1000 * val);
         };
 
+        // wait until DOM is loaded, then call function
         $(document).ready(function () {
+            // initialise new object and load the given SVGs into the DOM
+            // elements given by the provided CSS selectors, i.e.
+            // byborre_volvo_plan.svg is loaded from the server and its content
+            // placed into the DOM element with id 'plan'.
             var volvoSurface = new VolvoSurface({
                 "#perspective": "img/byborre_volvo_perspective.svg",
                 "#plan": "img/byborre_volvo_plan.svg"
             });
 
+            // wait until all given SVGs are successfully loaded, then call function
             volvoSurface.loaded(function () {
+                // connect to PubSub system
                 var host = window.location.hostname;
                 var relay = new RelayClient("ws://" + host + ":23148");
 
+                // subscribe to channel 'pressure' and call function everytime a
+                // message is received. A message has the following format:
+                //   { "1": 500, "2": 345, "3": 547, "4": 853 }
+                // Where the keys are sensor IDs and the values the corresponding
+                // pressure values.
                 relay.subscribe('pressure', function (values) {
+                    // iterate through the received dictionary
                     for (var key in values) {
                         if (values.hasOwnProperty(key)) {
+                            // adjust value to a range from 50 to 100 for lightness
+                            // (50 => base colour; 100 => white)
                             lightness = remapValue(values[key]);
 
+                            // set the resulting lightness of the polygon whose number
+                            // matches the dictionary key in the perspective SVG
                             $("#perspective").polygon(key).lightness(60, lightness);
+                            // set the resulting lightness of the polygon whose number
+                            // matches the dictionary key in the plan SVG
                             $("#plan").polygon(key).lightness(60, lightness);
                         }
                     }
