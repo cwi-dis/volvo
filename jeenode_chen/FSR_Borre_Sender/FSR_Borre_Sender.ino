@@ -13,37 +13,44 @@
 #include <Ports.h>
 #include <RF12.h>
 
-Port ldr_3 (3);//setup Jeenode V6 using Port3 
-Port ldr_4 (4);//setup Jeenode V6 using Port4
-Port ldr_1 (1);//setup Jeenode V6 using Port1 
-Port ldr_2 (2);//setup Jeenode V6 using Port2
+#define MAGIC 42
+#define IFDEBUG if(1)
+Port ports[] = {
+  Port(3),
+  Port(4),
+  Port(1),
+  Port(2)
+};
 
+#define NPORT (sizeof(ports) / sizeof(ports[0]))
 typedef struct {
+  byte magic;
   byte node;
   
-  byte data_1; 
-  byte data_2;
-  byte data_3; 
-  byte data_4; 
+  byte data[NPORT]; 
 } Payload;
 
 Payload payload;
 
 void setup () {
-  Serial.begin(57600);
+  IFDEBUG Serial.begin(57600);
   // use the node ID previously stored in EEPROM by RF12demo
   payload.node = rf12_config();
+  payload.magic = MAGIC;
 }
 
 void loop () {
   // wait for an incoming empty packet for us
   if (rf12_recvDone() && rf12_crc == 0 && rf12_len == 0 && RF12_WANTS_ACK) {
     // read data from the analog pins and store it into the payload struct
-    payload.data_1 = ldr_1.anaRead();
-    payload.data_2 = ldr_2.anaRead();
-    payload.data_3 = ldr_3.anaRead();
-    payload.data_4 = ldr_4.anaRead();
-    
+    IFDEBUG Serial.print("poll ");
+    for (int i=0; i<NPORT; i++) {
+       uint8_t value = ports[i].anaRead();
+       payload.data[i] = value;
+       IFDEBUG Serial.print((int)value);
+       IFDEBUG Serial.print(' ');
+    }
+    IFDEBUG Serial.println();
     // start transmission
     rf12_sendStart(RF12_ACK_REPLY, &payload, sizeof payload);  
   }

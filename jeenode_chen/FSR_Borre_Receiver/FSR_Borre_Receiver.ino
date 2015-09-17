@@ -9,15 +9,17 @@
 
 #include <JeeLib.h>
 
-const byte NUM_NODES = 2; // poll using node ID from 1 to NUM_NODES 
+const byte NUM_NODES = 3; // poll using node ID from 1 to NUM_NODES 
+
+#define MAGIC 42
+
+#define IFDEBUG if(1)
 
 typedef struct {
+  byte magic;
   byte node;
   
-  byte data_1; 
-  byte data_2; 
-  byte data_3;
-  byte data_4; 
+  byte data[0]; 
 } Payload;
 
 byte nextId;
@@ -39,28 +41,38 @@ void loop () {
   // wait up to 10 milliseconds for a reply
   timer.set(10);
   
-  while (!timer.poll())
-    if (rf12_recvDone() && rf12_crc == 0 && rf12_len == sizeof (Payload)) {
+  while (!timer.poll()) {
+    if (rf12_recvDone() && rf12_crc == 0 && rf12_len > 2) {
       // got a good ACK packet, print out its contents
       const Payload* p = (const Payload*) rf12_data;
-
-      // remap all the values into a range from 0 to 1000
-      int value1 = map(p->data_1, 0, 255, 0, 1000);
-      int value2 = map(p->data_2, 0, 255, 0, 1000);
-      int value3 = map(p->data_3, 0, 255, 0, 1000);
-      int value4 = map(p->data_4, 0, 255, 0, 1000);
-
+      if (p->magic != MAGIC) {
+        IFDEBUG {
+          Serial.print("{\"badMagic\": ");
+          Serial.print(nextId);
+          Serial.println("}");
+          
+        }
+        return;
+      }
+      int count = rf12_len - 2;
       // calculate base ID
       int base_id = (((int)p->node) - 1) * 4;
 
-      // send data out over the serial interface encoded as JSON
       Serial.print("{");
-      Serial.print("\""); Serial.print(base_id + 1); Serial.print("\": "); Serial.print(value1);  Serial.print(", ");
-      Serial.print("\""); Serial.print(base_id + 2); Serial.print("\": "); Serial.print(value2);  Serial.print(", ");
-      Serial.print("\""); Serial.print(base_id + 3); Serial.print("\": "); Serial.print(value3);  Serial.print(", ");
-      Serial.print("\""); Serial.print(base_id + 4); Serial.print("\": "); Serial.print(value4);  Serial.print(" ");
-      Serial.println("}");
-      
-      break;
+      for(int i=0; i<count; i++) {
+        // remap all the values into a range from 0 to 1000
+        int value = map(p->data[i], 0, 255, 0, 1000);
+        Serial.print("\""); Serial.print(base_id + i + 1); Serial.print("\": "); Serial.print(value);  Serial.print(", ");
+              
+      }
+      Serial.println("}");    
+      return;
     }
-}
+  }
+  IFDEBUG {
+    // Enable this for debugging
+    Serial.print("{\"notResponding\": ");
+    Serial.print(nextId);
+    Serial.println("}");
+  }
+ }
