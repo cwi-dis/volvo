@@ -87,26 +87,39 @@ if __name__ == "__main__":
     # initialise serial connection with 57600 baud
     receiver = Serial(port, baudrate=57600)
     # initialise PubSub system
-    pub = WebsocketPublisher(ws_host)
+    pub = None
+    if pub:
+        pub = WebsocketPublisher(ws_host)
+    else:
+        sys.stdout.write("WARNING: no websocket host specified, not publishing data\n")
+    lastSeen = {}
+    try:
+        while True:
+            # read line from serial port
+            result = receiver.readline()
 
-    while True:
-        # read line from serial port
-        result = receiver.readline()
+            try:
+                # parse line read from serial port as JSON
+                data = json.loads(result)
 
-        try:
-            # parse line read from serial port as JSON
-            data = json.loads(result)
+                # apply exponential smoothing to each value in the data
+                for key in data.keys():
+                    data[key] = round(exp_average(key, data[key]), 2)
 
-            # apply exponential smoothing to each value in the data
-            for key in data.keys():
-                data[key] = round(exp_average(key, data[key]), 2)
+                # print result with timestamp to stdout
+                now = time.time()
+                for sensorNum in data.keys():
+                    lastSeen[sensorNum] = now
+                sys.stdout.write("%.2f => %s\n" % (now, str(data)))
+                sys.stdout.flush()
 
-            # print result with timestamp to stdout
-            sys.stdout.write("%.2f => %s\n" % (time.time(), str(data)))
-            sys.stdout.flush()
-
-            # publish data on channel 'pressure'
-            pub.publish('pressure', data)
-        except ValueError:
-            # skip to next iteration if JSON parsing causes an exception
-            pass
+                # publish data on channel 'pressure'
+                if pub:
+                    pub.publish('pressure', data)
+            except ValueError:
+                # skip to next iteration if JSON parsing causes an exception
+                pass
+    except KeyboardInterrupt:
+        for sensorNum, ts in lastSeen.items():
+            print sensorNum, '\t', ts
+            
