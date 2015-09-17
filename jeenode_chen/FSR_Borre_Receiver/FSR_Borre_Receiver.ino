@@ -13,7 +13,7 @@ const byte NUM_NODES = 3; // poll using node ID from 1 to NUM_NODES
 
 #define MAGIC 42
 
-#define IFDEBUG if(1)
+#define IFDEBUG if(0)
 
 typedef struct {
   byte magic;
