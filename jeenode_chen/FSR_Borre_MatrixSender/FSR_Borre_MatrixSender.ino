@@ -18,15 +18,15 @@
 
 #define NROW 3
 #define NCOLUMN 3
+#define NPORT 3 /* max(NROW, NCOLUMN) */
+#define NSENSOR (NROW*NCOLUMN)
 
 Port ports[] = {
   Port(1),
   Port(2),
-  Port(3),
-  NULL
+  Port(3)
 };
 
-#define NSENSOR (NROW*NCOLUMN)
 typedef struct {
   byte magic;
   byte node;
@@ -41,7 +41,7 @@ void setup () {
   // use the node ID previously stored in EEPROM by RF12demo
   payload.node = rf12_config();
   payload.magic = MAGIC;
-  for (Port *p=ports; *p; p++) {
+  for (Port *p=ports; p < ports+NPORT; p++) {
   	// Set the digital pin to output, initizalize to HIGH
   	p->mode(OUTPUT);
     p->digiWrite(HIGH);
@@ -64,9 +64,9 @@ void loop () {
       for (int col=0; col < NCOLUMN; col++) {
       	// It is suggested to discard one analog reading to stabilize
       	// the ADC
-        uint8_t value = ports[col].anaRead();
+        uint16_t value; //  = ports[col].anaRead();
         value = ports[col].anaRead();
-        payload.data[i++] = value;
+        payload.data[i++] = (1023-value) >> 2;
         IFDEBUG Serial.print((int)value);
         IFDEBUG Serial.print(' ');
       }

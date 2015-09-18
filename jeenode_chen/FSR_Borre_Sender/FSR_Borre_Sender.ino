@@ -23,11 +23,13 @@ Port ports[] = {
 };
 
 #define NPORT (sizeof(ports) / sizeof(ports[0]))
+#define NSENSOR NPORT
+
 typedef struct {
   byte magic;
   byte node;
   
-  byte data[NPORT]; 
+  byte data[NSENSOR]; 
 } Payload;
 
 Payload payload;
@@ -37,6 +39,16 @@ void setup () {
   // use the node ID previously stored in EEPROM by RF12demo
   payload.node = rf12_config();
   payload.magic = MAGIC;
+  for (Port *p=ports; p < ports+NPORT; p++) {
+    // Set the digital pin to output, initizalize to HIGH
+    // (only needed for debugging, if this jeenode happens to
+    // have a matrix circuit attached)
+    p->mode(OUTPUT);
+    p->digiWrite(HIGH);
+    // Set the analog pin to input, disable pullup
+    p->mode2(INPUT);
+    p->digiWrite(LOW);
+  }
 }
 
 void loop () {
@@ -45,8 +57,8 @@ void loop () {
     // read data from the analog pins and store it into the payload struct
     IFDEBUG Serial.print("poll ");
     for (int i=0; i<NPORT; i++) {
-       uint8_t value = ports[i].anaRead();
-       payload.data[i] = value;
+       uint16_t value = ports[i].anaRead();
+       payload.data[i] = value >> 2;
        IFDEBUG Serial.print((int)value);
        IFDEBUG Serial.print(' ');
     }
