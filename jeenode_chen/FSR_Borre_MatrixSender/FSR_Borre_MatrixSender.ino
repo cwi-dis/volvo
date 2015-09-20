@@ -16,6 +16,16 @@
 #define MAGIC 42
 #define IFDEBUG if(1)
 
+#define POWERSAVETIMEOUT 10000
+#define POWERSAVEDURATION 60000
+
+#ifdef POWERSAVETIMEOUT 
+unsigned long lastReceptionTime;
+
+ISR(WDT_vect) { Sleepy::watchdogEvent(); }
+
+#endif
+
 #define NROW 3
 #define NCOLUMN 3
 #define NPORT 3 /* max(NROW, NCOLUMN) */
@@ -38,6 +48,7 @@ Payload payload;
 
 void setup () {
   IFDEBUG Serial.begin(57600);
+  IFDEBUG Serial.println("MatrixReceiver started");
   // use the node ID previously stored in EEPROM by RF12demo
   payload.node = rf12_config();
   payload.magic = MAGIC;
@@ -49,12 +60,19 @@ void setup () {
     p->mode2(INPUT);
     p->digiWrite(LOW);
   }
+#ifdef POWERSAVETIMEOUT
+  lastReceptionTime = millis();
+#endif
+
 }
 
 void loop () {
   // wait for an incoming empty packet for us
   if (rf12_recvDone() && rf12_crc == 0 && rf12_len == 0 && RF12_WANTS_ACK) {
     // read data from the analog pins and store it into the payload struct
+#ifdef POWERSAVETIMEOUT
+    lastReceptionTime = millis();
+#endif
     IFDEBUG Serial.print("poll ");
     int i = 0;
     for (int row=0; row<NROW; row++) {
@@ -76,4 +94,15 @@ void loop () {
     // start transmission
     rf12_sendStart(RF12_ACK_REPLY, &payload, sizeof payload);  
   }
+#ifdef POWERSAVETIMEOUT
+  else {
+    if (millis() > lastReceptionTime + POWERSAVETIMEOUT) {
+      IFDEBUG { Serial.println("Sleep"); delay(10); }
+      Sleepy::loseSomeTime(POWERSAVEDURATION);
+      lastReceptionTime = millis();
+      IFDEBUG Serial.println("Wakeup");
+    }
+  }
+#endif
+
 }
