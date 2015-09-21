@@ -98,7 +98,9 @@ void loop () {
   else {
     if (millis() > lastReceptionTime + POWERSAVETIMEOUT) {
       IFDEBUG { Serial.println("Sleep"); delay(10); }
+      rf12_sleep(RF12_SLEEP);
       Sleepy::loseSomeTime(POWERSAVEDURATION);
+      rf12_sleep(RF12_WAKEUP);
       lastReceptionTime = millis();
       IFDEBUG Serial.println("Wakeup");
     }
