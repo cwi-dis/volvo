@@ -11,7 +11,7 @@
 
 const byte NUM_NODES = 3; // poll using node ID from 1 to NUM_NODES 
 
-#define MAGIC 42  // Magic number that signals an ACK comes from our sensors
+#define MAGIC 43  // Magic number that signals an ACK comes from our sensors
 
 #define MAX_POLL_FREQ 50  // Poll sensors at most 50 times per second
 #ifdef MAX_POLL_FREQ
@@ -27,6 +27,7 @@ uint32_t nextPollCycleTime;
 typedef struct {
   byte magic;
   byte node;
+  byte lowbat;
   
   byte data[0]; 
 } Payload;
@@ -72,11 +73,15 @@ void loop () {
         }
         return;
       }
-      int count = rf12_len - 2;
+      int count = rf12_len - sizeof(Payload);
       // calculate base ID
       int base_id = (((int)p->node) - 1) * 4;
 
       Serial.print("{");
+      if (1 || p->lowbat) {
+        // Low-battery indicator for this sensor
+        Serial.print("\"lowBat"); Serial.print((int)p->node); Serial.print("\" :"); Serial.print((int)p->lowbat); Serial.print(", ");
+      }
       for(int i=0; i<count; i++) {
         // remap all the values into a range from 0 to 1000
         int value = map(p->data[i], 0, 255, 0, 1000);

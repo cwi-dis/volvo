@@ -13,7 +13,7 @@
 #include <Ports.h>
 #include <RF12.h>
 
-#define MAGIC 42
+#define MAGIC 43
 #define IFDEBUG if(0)
 
 //
@@ -44,7 +44,7 @@ Port ports[] = {
 typedef struct {
   byte magic;
   byte node;
-  
+  byte lowbat;
   byte data[NSENSOR]; 
 } Payload;
 
@@ -73,6 +73,9 @@ void setup () {
 void loop () {
   // wait for an incoming empty packet for us
   if (rf12_recvDone() && rf12_crc == 0 && rf12_len == 0 && RF12_WANTS_ACK) {
+    // read battery status
+    payload.lowbat = rf12_lowbat();
+    IFDEBUG { if (payload.lowbat) Serial.print("LOWBAT "); }
     // read data from the analog pins and store it into the payload struct
 #ifdef POWERSAVETIMEOUT
     lastReceptionTime = millis();
