@@ -11,7 +11,16 @@
 
 const byte NUM_NODES = 3; // poll using node ID from 1 to NUM_NODES 
 
-#define MAGIC 42
+#define MAGIC 42  // Magic number that signals an ACK comes from our sensors
+
+#define MAX_POLL_FREQ 50  // Poll sensors at most 50 times per second
+#ifdef MAX_POLL_FREQ
+// If the poll frequency is maximised the sensors can powerdown
+// after a poll, because they know they will not be polled again for a
+// certain time
+#define MIN_POLL_INTERVAL (1000/MAX_POLL_FREQ)
+uint32_t nextPollCycleTime;
+#endif // MAX_POLL_FREQ
 
 #define IFDEBUG if(0)
 
@@ -34,6 +43,15 @@ void loop () {
   // switch to next node
   if (++nextId > NUM_NODES) {
     nextId = 1;
+#ifdef MAX_POLL_FREQ
+    // Go to sleep until the next poll cycle can be started
+    uint64_t now = millis();
+    if (now < nextPollCycleTime) {
+      delay(nextPollCycleTime - now);
+      now = millis();
+    }
+    nextPollCycleTime = now+MIN_POLL_INTERVAL;
+#endif
   }
     
   // send an empty packet to one specific pollee

@@ -14,10 +14,14 @@
 #include <RF12.h>
 
 #define MAGIC 42
-#define IFDEBUG if(1)
+#define IFDEBUG if(0)
 
-#define POWERSAVETIMEOUT 10000
-#define POWERSAVEDURATION 60000
+//
+// Power saving features. #undef to disable
+//
+#undef POWERSAVETIMEOUT 10000    // Go to sleep after 10 seconds of no polls received
+#undef POWERSAVEDURATION 60000   // Go to sleep for 60 seconds
+#undef NAP_AFTER_POLL 40  // Nap for 15ms after a poll
 
 #ifdef POWERSAVETIMEOUT 
 unsigned long lastReceptionTime;
@@ -92,7 +96,13 @@ void loop () {
     }
     IFDEBUG Serial.println();
     // start transmission
-    rf12_sendStart(RF12_ACK_REPLY, &payload, sizeof payload);  
+    rf12_sendStart(RF12_ACK_REPLY, &payload, sizeof payload);
+#ifdef NAP_AFTER_POLL
+    rf12_sendWait(1);   // Wit for transmission completion with CPU in IDLE mode
+    rf12_sleep(RF12_SLEEP);
+    Sleepy::loseSomeTime(NAP_AFTER_POLL);
+    rf12_sleep(RF12_WAKEUP);
+ #endif 
   }
 #ifdef POWERSAVETIMEOUT
   else {
