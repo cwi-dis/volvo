@@ -78,7 +78,7 @@ void loop () {
       int base_id = (((int)p->node) - 1) * 4;
 
       Serial.print("{");
-      if (1 || p->lowbat) {
+      if (p->lowbat) {
         // Low-battery indicator for this sensor
         Serial.print("\"lowBat"); Serial.print((int)p->node); Serial.print("\" :"); Serial.print((int)p->lowbat); Serial.print(", ");
       }

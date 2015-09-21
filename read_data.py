@@ -92,6 +92,7 @@ if __name__ == "__main__":
         pub = WebsocketPublisher(ws_host)
     else:
         sys.stdout.write("WARNING: no websocket host specified, not publishing data\n")
+    firstSeen = {}
     lastSeen = {}
     try:
         while True:
@@ -109,6 +110,8 @@ if __name__ == "__main__":
                 # print result with timestamp to stdout
                 now = time.time()
                 for sensorNum in data.keys():
+                    if not sensorNum in firstSeen:
+                        firstSeen[sensorNum] = now
                     lastSeen[sensorNum] = now
                 sys.stdout.write("%.2f => %s\n" % (now, str(data)))
                 sys.stdout.flush()
@@ -121,5 +124,5 @@ if __name__ == "__main__":
                 pass
     except KeyboardInterrupt:
         for sensorNum, ts in lastSeen.items():
-            print sensorNum, '\t', ts
+            print sensorNum, '\t', ts, 'first', firstSeen[sensorNum]
             
