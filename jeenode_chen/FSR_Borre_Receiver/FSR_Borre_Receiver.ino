@@ -85,7 +85,8 @@ void loop () {
       for(int i=0; i<count; i++) {
         // remap all the values into a range from 0 to 1000
         int value = map(p->data[i], 0, 255, 0, 1000);
-        Serial.print("\""); Serial.print(base_id + i + 1); Serial.print("\": "); Serial.print(value);  Serial.print(", ");
+        Serial.print("\""); Serial.print(base_id + i + 1); Serial.print("\": "); Serial.print(value);  
+        if (i < count-1) Serial.print(", ");
               
       }
       Serial.println("}");    
