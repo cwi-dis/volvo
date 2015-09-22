@@ -37,7 +37,8 @@ MilliTimer timer;
 
 void setup () {
   Serial.begin(57600);
-  rf12_initialize(31, RF12_868MHZ, 80);
+  //rf12_initialize(31, RF12_868MHZ, 80);
+  rf12_config();
 }
 
 void loop () {

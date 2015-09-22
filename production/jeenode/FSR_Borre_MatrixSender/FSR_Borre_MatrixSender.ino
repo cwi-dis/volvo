@@ -14,13 +14,13 @@
 #include <RF12.h>
 
 #define MAGIC 43
-#define IFDEBUG if(0)
+#define IFDEBUG if(1)
 
 //
 // Power saving features. #undef to disable
 //
-#undef POWERSAVETIMEOUT 10000    // Go to sleep after 10 seconds of no polls received
-#undef POWERSAVEDURATION 60000   // Go to sleep for 60 seconds
+#define POWERSAVETIMEOUT 10000    // Go to sleep after 10 seconds of no polls received
+#define POWERSAVEDURATION 60000   // Go to sleep for 60 seconds
 #undef NAP_AFTER_POLL 40  // Nap for 15ms after a poll
 
 #ifdef POWERSAVETIMEOUT 
@@ -52,7 +52,7 @@ Payload payload;
 
 void setup () {
   IFDEBUG Serial.begin(57600);
-  IFDEBUG Serial.println("MatrixReceiver started");
+  IFDEBUG Serial.println("MatrixSender started");
   // use the node ID previously stored in EEPROM by RF12demo
   payload.node = rf12_config();
   payload.magic = MAGIC;
