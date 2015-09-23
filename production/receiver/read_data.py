@@ -88,7 +88,7 @@ if __name__ == "__main__":
     receiver = Serial(port, baudrate=57600)
     # initialise PubSub system
     pub = None
-    if pub:
+    if ws_host:
         pub = WebsocketPublisher(ws_host)
     else:
         sys.stdout.write("WARNING: no websocket host specified, not publishing data\n")
@@ -103,9 +103,11 @@ if __name__ == "__main__":
                 # parse line read from serial port as JSON
                 data = json.loads(result)
 
-                # apply exponential smoothing to each value in the data
+                # apply exponential smoothing to each value in the data,
+                # but only for the keys that are sensor values
                 for key in data.keys():
-                    data[key] = round(exp_average(key, data[key]), 2)
+                    if key[1] == 's':
+                        data[key] = round(exp_average(key, data[key]), 2)
 
                 # print result with timestamp to stdout
                 now = time.time()

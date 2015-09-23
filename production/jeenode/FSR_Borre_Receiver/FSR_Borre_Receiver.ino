@@ -13,6 +13,7 @@ const byte NUM_NODES = 3; // poll using node ID from 1 to NUM_NODES
 
 #define MAGIC 43  // Magic number that signals an ACK comes from our sensors
 
+#define POLL_TIMEOUT 20  // How many milliseconds to wait for poll reply
 #define MAX_POLL_FREQ 50  // Poll sensors at most 50 times per second
 #ifdef MAX_POLL_FREQ
 // If the poll frequency is maximised the sensors can powerdown
@@ -59,34 +60,30 @@ void loop () {
   // send an empty packet to one specific pollee
   rf12_sendNow(RF12_HDR_ACK | RF12_HDR_DST | nextId, 0, 0);
   // wait up to 10 milliseconds for a reply
-  timer.set(10);
+  timer.set(POLL_TIMEOUT);
   
   while (!timer.poll()) {
     if (rf12_recvDone() && rf12_crc == 0 && rf12_len > 2) {
       // got a good ACK packet, print out its contents
       const Payload* p = (const Payload*) rf12_data;
       if (p->magic != MAGIC) {
-        IFDEBUG {
-          Serial.print("{\"badMagic\": ");
-          Serial.print(nextId);
-          Serial.println("}");
-          
-        }
+        Serial.print("{\"");
+        Serial.print(nextId);
+        Serial.println("badResponse\":1}");
         return;
       }
       int count = rf12_len - sizeof(Payload);
       // calculate base ID
-      int base_id = (((int)p->node) - 1) * 4;
 
       Serial.print("{");
       if (p->lowbat) {
         // Low-battery indicator for this sensor
-        Serial.print("\"lowBat"); Serial.print((int)p->node); Serial.print("\" :"); Serial.print((int)p->lowbat); Serial.print(", ");
+        Serial.print("\""); Serial.print((int)p->node); Serial.print("lowBat\" :"); Serial.print((int)p->lowbat); Serial.print(", ");
       }
       for(int i=0; i<count; i++) {
         // remap all the values into a range from 0 to 1000
         int value = map(p->data[i], 0, 255, 0, 1000);
-        Serial.print("\""); Serial.print(base_id + i + 1); Serial.print("\": "); Serial.print(value);  
+        Serial.print("\""); Serial.print(p->node); Serial.print("s"); Serial.print(i+1); Serial.print("\": "); Serial.print(value);  
         if (i < count-1) Serial.print(", ");
               
       }
@@ -94,10 +91,7 @@ void loop () {
       return;
     }
   }
-  IFDEBUG {
-    // Enable this for debugging
-    Serial.print("{\"notResponding\": ");
-    Serial.print(nextId);
-    Serial.println("}");
-  }
+  Serial.print("{\"");
+  Serial.print(nextId);
+  Serial.println("noResponse\": 1}");
  }
