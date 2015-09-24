@@ -94,37 +94,33 @@ if __name__ == "__main__":
         sys.stdout.write("WARNING: no websocket host specified, not publishing data\n")
     firstSeen = {}
     lastSeen = {}
-    try:
-        while True:
-            # read line from serial port
-            result = receiver.readline()
+    while True:
+        # read line from serial port
+        result = receiver.readline()
 
-            try:
-                # parse line read from serial port as JSON
-                data = json.loads(result)
+        try:
+            # parse line read from serial port as JSON
+            data = json.loads(result)
 
-                # apply exponential smoothing to each value in the data,
-                # but only for the keys that are sensor values
-                for key in data.keys():
-                    if key[1] == 's':
-                        data[key] = round(exp_average(key, data[key]), 2)
+            # apply exponential smoothing to each value in the data,
+            # but only for the keys that are sensor values
+            for key in data.keys():
+                if key.isdigit():
+                    data[key] = round(exp_average(key, data[key]), 2)
 
-                # print result with timestamp to stdout
-                now = time.time()
-                for sensorNum in data.keys():
-                    if not sensorNum in firstSeen:
-                        firstSeen[sensorNum] = now
-                    lastSeen[sensorNum] = now
-                sys.stdout.write("%.2f => %s\n" % (now, str(data)))
-                sys.stdout.flush()
+            # print result with timestamp to stdout
+            now = time.time()
+            for sensorNum in data.keys():
+                if not sensorNum in firstSeen:
+                    firstSeen[sensorNum] = now
+                lastSeen[sensorNum] = now
+            sys.stdout.write("%.2f => %s\n" % (now, str(data)))
+            sys.stdout.flush()
 
-                # publish data on channel 'pressure'
-                if pub:
-                    pub.publish('pressure', data)
-            except ValueError:
-                # skip to next iteration if JSON parsing causes an exception
-                pass
-    except KeyboardInterrupt:
-        for sensorNum, ts in lastSeen.items():
-            print sensorNum, '\t', ts, 'first', firstSeen[sensorNum]
+            # publish data on channel 'pressure'
+            if pub:
+                pub.publish('pressure', data)
+        except ValueError:
+            # skip to next iteration if JSON parsing causes an exception
+            pass
             

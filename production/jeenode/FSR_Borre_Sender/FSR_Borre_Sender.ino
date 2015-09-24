@@ -14,13 +14,13 @@
 #include <RF12.h>
 
 #define MAGIC 43
-#define IFDEBUG if(1)
+#define IFDEBUG if(0)
 Port ports[] = {
-  Port(3),
-  Port(4),
   Port(1),
-  Port(2)
+  Port(2),
+  Port(3)
 };
+
 
 #define NPORT (sizeof(ports) / sizeof(ports[0]))
 #define NSENSOR NPORT

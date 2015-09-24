@@ -14,7 +14,7 @@
 #include <RF12.h>
 
 #define MAGIC 43
-#define IFDEBUG if(1)
+#define IFDEBUG if(0)
 
 //
 // Power saving features. #undef to disable

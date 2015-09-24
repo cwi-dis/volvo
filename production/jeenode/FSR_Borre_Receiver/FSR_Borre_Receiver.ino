@@ -9,7 +9,7 @@
 
 #include <JeeLib.h>
 
-const byte NUM_NODES = 3; // poll using node ID from 1 to NUM_NODES 
+const byte NUM_NODES = 9; // poll using node ID from 1 to NUM_NODES 
 
 #define MAGIC 43  // Magic number that signals an ACK comes from our sensors
 
@@ -66,32 +66,33 @@ void loop () {
     if (rf12_recvDone() && rf12_crc == 0 && rf12_len > 2) {
       // got a good ACK packet, print out its contents
       const Payload* p = (const Payload*) rf12_data;
+      
+      Serial.print("{\"n\":"); 
+      Serial.print(nextId);
+      Serial.print(", ");
       if (p->magic != MAGIC) {
-        Serial.print("{\"");
-        Serial.print(nextId);
-        Serial.println("badResponse\":1}");
+        Serial.println("\"error\":\"badResponse\"}");
         return;
       }
       int count = rf12_len - sizeof(Payload);
       // calculate base ID
 
-      Serial.print("{");
       if (p->lowbat) {
         // Low-battery indicator for this sensor
-        Serial.print("\""); Serial.print((int)p->node); Serial.print("lowBat\" :"); Serial.print((int)p->lowbat); Serial.print(", ");
+        Serial.print("\"error\":\"lowBattery\",");
       }
       for(int i=0; i<count; i++) {
         // remap all the values into a range from 0 to 1000
         int value = map(p->data[i], 0, 255, 0, 1000);
-        Serial.print("\""); Serial.print(p->node); Serial.print("s"); Serial.print(i+1); Serial.print("\": "); Serial.print(value);  
-        if (i < count-1) Serial.print(", ");
-              
+        Serial.print("\""); Serial.print(i+1); Serial.print("\": "); Serial.print(value);  
+        if (i < count-1) Serial.print(", ");            
       }
       Serial.println("}");    
       return;
     }
   }
-  Serial.print("{\"");
+  Serial.print("{\"n\":"); 
   Serial.print(nextId);
-  Serial.println("noResponse\": 1}");
+  Serial.print(", ");
+  Serial.println("\"error\":\"noResponse\"}");
  }
