@@ -125,14 +125,14 @@ function VolvoSurface(svgMappings) {
 
             // build selector
             var selector = id.map(function (i) {
-                return "#polygon_" + i;
+                return i;
             });
 
 
             jq = $(this).find(selector.join(","));
         } else {
             // if a single element was provided use it to create selector
-            jq = $(this).find("#polygon_" + id);
+            jq = $(this).find(id);
         }
 
         // attach function lightness() to the set of matched elements

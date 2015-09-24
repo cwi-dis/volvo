@@ -7,7 +7,7 @@
         /* Have each SVG container take up half of the screen and align them
            horizontally next to each other ot the left. */
         .svgcontainer {
-            width:49%;
+            width:100%;
             float:left;
         }
     </style>
@@ -32,8 +32,7 @@
             // byborre_volvo_plan.svg is loaded from the server and its content
             // placed into the DOM element with id 'plan'.
             var volvoSurface = new VolvoSurface({
-                "#perspective": "img/byborre_volvo_perspective.svg",
-                "#plan": "img/byborre_volvo_plan.svg"
+                "#graphic": "img/volvo_graphic.svg",
             });
 
             // wait until all given SVGs are successfully loaded, then call function
@@ -54,15 +53,24 @@
                             // adjust value to a range from 50 to 100 for lightness
                             // (50 => base colour; 100 => white)
                             lightness = remapValue(values[key]);
+                            // Compute identifiers for polygons (and error messages)
+                            // Note the _2_ is some artefact of AI exporting to SVG that we don't understand.
+							var key_3d = "#threed" + key + "_2_";
+							var key_plan = "#plan" + key + "_2_";
+							var key_side = "#side" + key + "_1_";
+							var key_error = "#node" + key;
+							// Hand remains TBD
+							// Swipe remains TBD
+							
+                            // set the resulting lightness of the various polygons whose number
+                            // match the dictionary key in the perspective SVG
+                            
+                            $("#graphic").polygon(key_3d).setHSLA(120, 0, lightness, 1.0);
+                            $("#graphic").polygon(key_plan).setHSLA(120, 0, lightness, 1.0);
+                            $("#graphic").polygon(key_side).setHSLA(120, 0, lightness, 1.0);
 
-                            // set the resulting lightness of the polygon whose number
-                            // matches the dictionary key in the perspective SVG
-                            $("#perspective").polygon(key).setHSLA(120, 0, lightness, 1.0);
-                            // set the resulting lightness of the polygon whose number
-                            // matches the dictionary key in the plan SVG
-                            $("#plan").polygon(key).setHSLA(120, 0, lightness, 1.0);
                             // Enable any node in the html that waits for this event
-                            if (values[key]) $("#node" + key).attr("style", "");
+                            if (values[key]) $(key_error).attr("style", "");
                         }
                     }
                 });
@@ -87,9 +95,7 @@
 		<span id="node3lowBattery" style="display: none">Jeenode #3 battery low</span>
 	</div>
 		
-    <div class="svgcontainer" id="perspective">
-    </div>
-    <div class="svgcontainer" id="plan">
+    <div class="svgcontainer" id="graphic">
     </div>
 </body>
 </html>
