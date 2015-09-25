@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>Volvo debug console</title>
+  <style>
+    .label {
+      font-family:Helvetica, Arial, sans-serif;
+      font-size:medium;
+    }
+
+    .bar {
+      height:20px;
+      width:0%;
+      background-color:#999955;
+      margin:20px;
+    }
+    .error {
+      font-size: medium;
+      color: red;
+    }
+  </style>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script type="text/javascript" src="js/relay-client.js"></script>
+	<script type="text/javascript">
+
+		// wait until DOM is loaded, then call function
+		$(document).ready(function () {
+			// connect to PubSub system
+			var host = window.location.hostname;
+			var relay = new RelayClient("ws://" + host + ":23148");
+
+			// subscribe to channel 'pressure' and call function everytime a
+			// message is received. A message has the following format:
+			//   { "1": 500, "2": 345, "3": 547, "4": 853 }
+			// Where the keys are sensor IDs and the values the corresponding
+			// pressure values.
+			relay.subscribe('pressure', function (values) {
+
+				// set (or clear) the per-tile error string
+				var error_id = "#error_" + values.n;
+				var error_string = "";
+				if (values.hasOwnProperty("error")) {
+					error_string = values.error;
+				}
+				$(error_id).text(error_string);
+
+				// iterate through the received dictionary				
+				for (var key in values) {
+					if (values.hasOwnProperty(key)) {
+						// adjust value to a range from 50 to 100 for lightness
+						// (50 => base colour; 100 => white)
+						var val = values[key];
+						// Compute identifiers for polygons (and error messages)
+						// Note the _2_ is some artefact of AI exporting to SVG that we don't understand.
+						var key_bar = "#pressure_" + key;
+				
+						// set the resulting lightness of the various polygons whose number
+						// match the dictionary key in the perspective SVG
+				
+						$(key_bar).width((val*100) + "%");
+					}
+				}
+			});
+		});
+	</script>
+</head>
+<body>
+  <div class="label">Tile 1</div>
+  <div class="error" id="error_1"></div>
+  <div class="bar" id="pressure_1s1">1</div>
+  <div class="bar" id="pressure_1s2">2</div>
+  <div class="bar" id="pressure_1s3">3</div>
+
+  <div class="label">Tile 2</div>
+  <div class="error" id="error_2"></div>
+  <div class="bar" id="pressure_2s1">1</div>
+  <div class="bar" id="pressure_2s2">2</div>
+  <div class="bar" id="pressure_2s3">3</div>
+
+  <div class="label">Tile 3</div>
+  <div class="error" id="error_3"></div>
+  <div class="bar" id="pressure_3s1">1</div>
+  <div class="bar" id="pressure_3s2">2</div>
+  <div class="bar" id="pressure_3s3">3</div>
+
+  <div class="label">Tile 4</div>
+  <div class="error" id="error_4"></div>
+  <div class="bar" id="pressure_4s1">1</div>
+  <div class="bar" id="pressure_4s2">2</div>
+  <div class="bar" id="pressure_4s3">3</div>
+
+  <div class="label">Tile 5</div>
+  <div class="error" id="error_5"></div>
+  <div class="bar" id="pressure_5s1">1</div>
+  <div class="bar" id="pressure_5s2">2</div>
+  <div class="bar" id="pressure_5s3">3</div>
+
+  <div class="label">Tile 6</div>
+  <div class="error" id="error_6"></div>
+  <div class="bar" id="pressure_6s1">1</div>
+  <div class="bar" id="pressure_6s2">2</div>
+  <div class="bar" id="pressure_6s3">3</div>
+
+  <div class="label">Tile 7</div>
+  <div class="error" id="error_7"></div>
+  <div class="bar" id="pressure_7s1">1</div>
+  <div class="bar" id="pressure_7s2">2</div>
+  <div class="bar" id="pressure_7s3">3</div>
+
+  <div class="label">Tile 8 (Hand tile)</div>
+  <div class="error" id="error_8"></div>
+  <div class="bar" id="pressure_8s1">1</div>
+  <div class="bar" id="pressure_8s2">2</div>
+  <div class="bar" id="pressure_8s3">3</div>
+
+  <div class="label">Tile 9 (Swipe tile)</div>
+  <div class="error" id="error_9"></div>
+  <div class="bar" id="pressure_9s1">1</div>
+  <div class="bar" id="pressure_9s2">2</div>
+  <div class="bar" id="pressure_9s3">3</div>
+  <div class="bar" id="pressure_9s4">4</div>
+  <div class="bar" id="pressure_9s5">5</div>
+  <div class="bar" id="pressure_9s6">6</div>
+  <div class="bar" id="pressure_9s7">7</div>
+  <div class="bar" id="pressure_9s8">8</div>
+  <div class="bar" id="pressure_9s9">9</div>
+
+</body>
+</html>

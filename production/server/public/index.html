@@ -20,10 +20,6 @@
     <!-- Include VolvoSurface for PubSub loading and modifying SVGs -->
     <script type="text/javascript" src="js/volvoSurface.js"></script>
     <script type="text/javascript">
-        function remapValue(val) {
-            // return 100 - (50 / 1000 * val);
-            return 100-(val/10);
-        };
 
         // wait until DOM is loaded, then call function
         $(document).ready(function () {
@@ -52,7 +48,7 @@
                         if (values.hasOwnProperty(key)) {
                             // adjust value to a range from 50 to 100 for lightness
                             // (50 => base colour; 100 => white)
-                            lightness = remapValue(values[key]);
+                            lightness = values[key];
                             // Compute identifiers for polygons (and error messages)
                             // Note the _2_ is some artefact of AI exporting to SVG that we don't understand.
 							var key_3d = "#threed" + key + "_2_";
@@ -97,5 +93,6 @@
 		
     <div class="svgcontainer" id="graphic">
     </div>
+    <p><a href="debug.html">Show debug view</a>
 </body>
 </html>

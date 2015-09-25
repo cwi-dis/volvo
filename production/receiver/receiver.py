@@ -26,7 +26,7 @@ from sensorrelay import WebsocketPublisher
 from serial import Serial
 from serial.tools import list_ports
 
-VERBOSE=False
+VERBOSE=True
 
 def get_portname():
     """Interactive helper function - ask for tty portname"""
@@ -58,7 +58,8 @@ class SensorReceiver:
     def __init__(self, comport, server):
         self.comport = comport
         self.server = server
-        self.buffers = defaultdict(float)
+        self.runningAverage = defaultdict(float)
+        self.globalMax = 0
 
     def exp_average(self, key, val, alpha=0.2):
         """ Computes exponential running average for the given value.
@@ -74,9 +75,25 @@ class SensorReceiver:
         adequate response times given the data for which this is intended to be
         used.
         """
-        self.buffers[key] = (alpha * val) + (1.0 - alpha) * self.buffers[key]
-        return self.buffers[key]
+        self.runningAverage[key] = (alpha * val) + (1.0 - alpha) * self.runningAverage[key]
+        return self.runningAverage[key]
 
+    def exp_minmax(self, tile, key, val):
+        if val > self.globalMax:
+            self.globalMax = val
+        ravg = self.exp_average(key, val)
+        curMin = ravg / 2
+        curMax = self.globalMax
+        if curMax == curMin: return 0
+        val = max(val, curMin)
+        val = min(val, curMax)
+        return (val-curMin) / (curMax-curMin)
+        
+    def process_value(self, tile, key, value):
+        #return round(self.exp_average(key, value), 2)
+        #return self.exp_minmax(tile, key, value)
+        return value / 256.0
+        
     def run(self):
         while True:
             # read line from serial port
@@ -88,9 +105,13 @@ class SensorReceiver:
 
                 # apply exponential smoothing to each value in the data,
                 # but only for the keys that are sensor values
+                tile = data['n']
                 for key in data.keys():
                     if key.isdigit():
-                        data[key] = round(self.exp_average(key, data[key]), 2)
+                        value = data[key]
+                        del data[key]
+                        key = '%ss%s' % (tile, key)
+                        data[key] = self.process_value(tile, key, value)
 
                 if VERBOSE:
                     # print result with timestamp to stdout

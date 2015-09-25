@@ -82,8 +82,7 @@ void loop () {
         Serial.print("\"error\":\"lowBattery\",");
       }
       for(int i=0; i<count; i++) {
-        // remap all the values into a range from 0 to 1000
-        int value = map(p->data[i], 0, 255, 0, 1000);
+        int value = p->data[i];
         Serial.print("\""); Serial.print(i+1); Serial.print("\": "); Serial.print(value);  
         if (i < count-1) Serial.print(", ");            
       }
