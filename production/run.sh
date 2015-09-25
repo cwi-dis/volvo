@@ -1,6 +1,13 @@
 #!/bin/sh
 dirname=`dirname $0`
+set -x
+
+killall python
+killall node
+killall npm
+killall 'Google Chrome'
+
 sh $dirname/runserver.sh &
 sleep 5
 sh $dirname/runvisualisation.sh &
-sh $dirname/runreceiver.sh &
+exec $dirname/runreceiver.sh
