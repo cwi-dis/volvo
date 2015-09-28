@@ -78,14 +78,25 @@ class SensorValueAdapter:
         rv = float(value-rangeMin) / (rangeMax-rangeMin)
         return rv
         
-    
+class SwipeSensorValueAdapter(SensorValueAdapter):
+    def __init__(self):
+        SensorValueAdapter.__init__(self)
+        self.active = False
+        self.firstSensor = None
+        self.lastSensor = None
+        self.swipeStartTime = None
+        
+    def process_value(self, tile, key, value):
+        value = SensorValueAdapter.process_value(self, tile, key, value)
+        return value
+        
 class SensorReceiver:
     def __init__(self, comport, server):
         self.comport = comport
         self.server = server
         self.runningAverage = defaultdict(float)
         self.mainAdapter = SensorValueAdapter()
-        self.swipeAdapter = SensorValueAdapter()
+        self.swipeAdapter = SwipeSensorValueAdapter()
 
     def get_adapter(self, tile):
         if tile == SWIPE_TILE: return self.swipeAdapter

@@ -54,14 +54,14 @@
                         if (values.hasOwnProperty(key)) {
                             // adjust value to a range from 50 to 100 for lightness
                             // (50 => base colour; 100 => white)
-                            lightness = values[key];
+                            lightness = values[key]*100;
                             // Compute identifiers for polygons (and error messages)
                             // Note the _2_ is some artefact of AI exporting to SVG that we don't understand.
 							var key_3d = "#threed" + key + "_2_";
 							var key_plan = "#plan" + key + "_2_";
 							var key_side = "#side" + key + "_1_";
 							// Hand remains TBD
-							// Swipe remains TBD
+							var key_swipe = "#swipe" + key + "_2_";
 							
                             // set the resulting lightness of the various polygons whose number
                             // match the dictionary key in the perspective SVG
@@ -69,6 +69,7 @@
                             $("#graphic").polygon(key_3d).setHSLA(120, 0, lightness, 1.0);
                             $("#graphic").polygon(key_plan).setHSLA(120, 0, lightness, 1.0);
                             $("#graphic").polygon(key_side).setHSLA(120, 0, lightness, 1.0);
+                            $("#graphic").polygon(key_swipe).setHSLA(120, 0, lightness, 1.0);
 
                         }
                     }
