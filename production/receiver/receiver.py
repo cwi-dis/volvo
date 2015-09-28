@@ -26,10 +26,11 @@ from sensorrelay import WebsocketPublisher
 from serial import Serial
 from serial.tools import list_ports
 
-VERBOSE=True
+VERBOSE=False
 
 DEFAULT_MAXIMUM_PRESSURE = 2      # Defaul value (and minimal value) for pressure that is seen as 100%
 SWIPE_TILE = 9                     # Tile with 9 sensors used as a slider
+SWIPE_TIMEOUT = 1.0                # A swipe remains active for at least one second
 
 def get_portname():
     """Interactive helper function - ask for tty portname"""
@@ -86,6 +87,24 @@ class SwipeSensorValueAdapter(SensorValueAdapter):
         
     def process_value(self, tile, key, value):
         value = SensorValueAdapter.process_value(self, tile, key, value)
+        if value > 0:
+            # This sensor is pressed. Update start and end of swipe, and swipe active time.
+            self.swipeStartTime = time.time()
+            if key < self.firstSensor or not self.firstSensor:
+                self.firstSensor = key
+            if key > self.lastSensor or not self.lastSensor:
+                self.lastSensor = key
+        elif self.swipeStartTime and time.time() > self.swipeStartTime + SWIPE_TIMEOUT:
+            # This sensor is not pressed, and nothing has been pressed during the timeout.
+            # Reset the slider.
+            self.firstSensor = None
+            self.lastSensor = None
+            self.swipeStartTime = None
+        else:
+            # This sensor is not pressed, but a swipe is underway. Light up this sensor if
+            # it is between first and last.
+            if self.firstSensor <= key and self.lastSensor >= key:
+                value = 1.0
         return value
         
 class SensorReceiver:
