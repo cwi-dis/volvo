@@ -6,10 +6,16 @@
     <style>
         /* Have each SVG container take up half of the screen and align them
            horizontally next to each other ot the left. */
+        body {
+        	background-color: black;
+		}
         .svgcontainer {
             width:100%;
             float:left;
         }
+        .debuglabel {
+        	color:grey;
+		}
     </style>
 
     <!-- Load jQuery from Google's CDN -->
@@ -73,6 +79,6 @@
 </head>
 <body>		
     <div class="svgcontainer" id="graphic"></div>
-    <p><a href="debug.html">Show debug view</a>
+    <div class="debuglabel"><a href="debug.html">Show debug view</a></div>
 </body>
 </html>
