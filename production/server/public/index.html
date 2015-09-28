@@ -54,7 +54,6 @@
 							var key_3d = "#threed" + key + "_2_";
 							var key_plan = "#plan" + key + "_2_";
 							var key_side = "#side" + key + "_1_";
-							var key_error = "#node" + key;
 							// Hand remains TBD
 							// Swipe remains TBD
 							
@@ -65,34 +64,15 @@
                             $("#graphic").polygon(key_plan).setHSLA(120, 0, lightness, 1.0);
                             $("#graphic").polygon(key_side).setHSLA(120, 0, lightness, 1.0);
 
-                            // Enable any node in the html that waits for this event
-                            if (values[key]) $(key_error).attr("style", "");
                         }
                     }
                 });
             });
-            // Reset error messages by clicking on them
-            $(".errors span").click(function() {
-            	$(this).attr("style", "display: none");
-			});
         });
     </script>
 </head>
-<body>
-	<div class="errors">
-		<span id="node1noResponse" style="display: none">Jeenode #1 not responding</span>
-		<span id="node1badResponse" style="display: none">Jeenode #1 bad response to poll request</span>
-		<span id="node1lowBattery" style="display: none">Jeenode #1 battery low</span>
-		<span id="node2noResponse" style="display: none">Jeenode #2 not responding</span>
-		<span id="node2badResponse" style="display: none">Jeenode #2 bad response to poll request</span>
-		<span id="node2lowBattery" style="display: none">Jeenode #2 battery low</span>
-		<span id="node3noResponse" style="display: none">Jeenode #3 not responding</span>
-		<span id="node3badResponse" style="display: none">Jeenode #3 bad response to poll request</span>
-		<span id="node3lowBattery" style="display: none">Jeenode #3 battery low</span>
-	</div>
-		
-    <div class="svgcontainer" id="graphic">
-    </div>
+<body>		
+    <div class="svgcontainer" id="graphic"></div>
     <p><a href="debug.html">Show debug view</a>
 </body>
 </html>
