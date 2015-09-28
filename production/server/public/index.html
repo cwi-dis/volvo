@@ -26,6 +26,21 @@
     <!-- Include VolvoSurface for PubSub loading and modifying SVGs -->
     <script type="text/javascript" src="js/volvoSurface.js"></script>
     <script type="text/javascript">
+		function Selector_Cache() {
+			var collection = {};
+
+			function get_from_cache( selector ) {
+				if ( undefined === collection[ selector ] ) {
+					collection[ selector ] = $( selector );
+				}
+
+				return collection[ selector ];
+			}
+
+			return { get: get_from_cache };
+		}
+
+		var selectors = new Selector_Cache();
 
         // wait until DOM is loaded, then call function
         $(document).ready(function () {
@@ -66,10 +81,10 @@
                             // set the resulting lightness of the various polygons whose number
                             // match the dictionary key in the perspective SVG
                             
-                            $("#graphic").polygon(key_3d).setHSLA(120, 0, lightness, 1.0);
-                            $("#graphic").polygon(key_plan).setHSLA(120, 0, lightness, 1.0);
-                            $("#graphic").polygon(key_side).setHSLA(120, 0, lightness, 1.0);
-                            $("#graphic").polygon(key_swipe).setHSLA(120, 0, lightness, 1.0);
+                            selectors.get(key_3d).setHSLA(120, 0, lightness, 1.0);
+                            selectors.get(key_plan).setHSLA(120, 0, lightness, 1.0);
+                            selectors.get(key_side).setHSLA(120, 0, lightness, 1.0);
+                            selectors.get(key_swipe).setHSLA(120, 0, lightness, 1.0);
 
                         }
                     }

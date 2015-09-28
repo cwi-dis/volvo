@@ -114,35 +114,9 @@ function VolvoSurface(svgMappings) {
  * method .css(); see http://api.jquery.com/css/)
  **/
 (function ($) {
-    $.fn.polygon = function (id) {
-        var jq = {};
-
-        if (id === undefined) {
-            // if no argument was provided, return all polygons
-            jq = $(this).find(".polygon");
-        } else if (id instanceof Array) {
-            // if an array was provided, return matching polygons
-
-            // build selector
-            var selector = id.map(function (i) {
-                return i;
-            });
-
-
-            jq = $(this).find(selector.join(","));
-        } else {
-            // if a single element was provided use it to create selector
-            jq = $(this).find(id);
-        }
-
-        // attach function lightness() to the set of matched elements
-        jq.setHSLA = function (hue, saturation, lightness, alpha) {
-			// set base colour and lightness using HSLA with saturation
-			// fixed at 100% and an opacity of 0.7
-			$(this).attr("fill", "hsla(" + hue + ", " + saturation + "%, " + lightness + "%, " + alpha + ")");
-        };
-
-        // return set of matched elements
-        return jq;
-    };
+    $.fn.setHSLA = function (hue, saturation, lightness, alpha) {
+		// set base colour and lightness using HSLA with saturation
+		// fixed at 100% and an opacity of 0.7
+		$(this).attr("fill", "hsla(" + hue + ", " + saturation + "%, " + lightness + "%, " + alpha + ")");
+    }
 }(jQuery));
