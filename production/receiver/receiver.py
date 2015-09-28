@@ -28,7 +28,7 @@ from serial.tools import list_ports
 
 VERBOSE=True
 
-DEFAULT_MAXIMUM_PRESSURE = 20      # Defaul value (and minimal value) for pressure that is seen as 100%
+DEFAULT_MAXIMUM_PRESSURE = 2      # Defaul value (and minimal value) for pressure that is seen as 100%
 SWIPE_TILE = 9                     # Tile with 9 sensors used as a slider
 
 def get_portname():
@@ -61,7 +61,6 @@ class SensorValueAdapter:
     def __init__(self):
         self.perSensorMin = {}
         self.perSensorMax = {}
-        self.globalMax = 0
 
     def process_value(self, tile, key, value):
         # Keep per-sensor minimal and maximal value and global maximum
@@ -69,14 +68,13 @@ class SensorValueAdapter:
             self.perSensorMin[key] = value
         if not key in self.perSensorMax or value > self.perSensorMax[key]:
             self.perSensorMax[key] = value
-        if value > self.globalMax:
-            self.globalMax = value
-        #return round(self.exp_average(key, value), 2)
-        #return self.exp_minmax(tile, key, value)
+        else:
+            self.perSensorMax[key] -= 1
         rangeMin = self.perSensorMin[key]
-        rangeMax = max(self.globalMax, DEFAULT_MAXIMUM_PRESSURE)
+        rangeMax = max(self.perSensorMin[key]+DEFAULT_MAXIMUM_PRESSURE, self.perSensorMax[key])
         rv = float(value-rangeMin) / (rangeMax-rangeMin)
-        return rv
+        if rv > 0.5: return 1.0
+        return 0.0
         
 class SwipeSensorValueAdapter(SensorValueAdapter):
     def __init__(self):
@@ -140,6 +138,11 @@ class SensorReceiver:
                 # apply exponential smoothing to each value in the data,
                 # but only for the keys that are sensor values
                 tile = data['n']
+                if VERBOSE:
+                    # print result with timestamp to stdout
+                    now = time.time()
+                    sys.stdout.write("%.2f .. %s\n" % (now, str(data)))
+                    sys.stdout.flush()
                 for key in data.keys():
                     if key.isdigit():
                         value = data[key]

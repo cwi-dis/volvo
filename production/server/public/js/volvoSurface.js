@@ -137,14 +137,9 @@ function VolvoSurface(svgMappings) {
 
         // attach function lightness() to the set of matched elements
         jq.setHSLA = function (hue, saturation, lightness, alpha) {
-            // if lightness is 100 (pure white) make background transparent
-            if (lightness === 100) {
-                $(this).attr("fill", "none");
-            } else {
-                // set base colour and lightness using HSLA with saturation
-                // fixed at 100% and an opacity of 0.7
-                $(this).attr("fill", "hsla(" + hue + ", " + saturation + "%, " + lightness + "%, " + alpha + ")");
-            }
+			// set base colour and lightness using HSLA with saturation
+			// fixed at 100% and an opacity of 0.7
+			$(this).attr("fill", "hsla(" + hue + ", " + saturation + "%, " + lightness + "%, " + alpha + ")");
         };
 
         // return set of matched elements
