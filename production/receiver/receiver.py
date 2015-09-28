@@ -28,6 +28,9 @@ from serial.tools import list_ports
 
 VERBOSE=True
 
+DEFAULT_MAXIMUM_PRESSURE = 20      # Defaul value (and minimal value) for pressure that is seen as 100%
+SWIPE_TILE = 9                     # Tile with 9 sensors used as a slider
+
 def get_portname():
     """Interactive helper function - ask for tty portname"""
     print "Please select a port to listen on:"
@@ -54,13 +57,40 @@ def get_ws_host():
 
     return ws_host
 
+class SensorValueAdapter:
+    def __init__(self):
+        self.perSensorMin = {}
+        self.perSensorMax = {}
+        self.globalMax = 0
+
+    def process_value(self, tile, key, value):
+        # Keep per-sensor minimal and maximal value and global maximum
+        if not key in self.perSensorMin or value < self.perSensorMin[key]:
+            self.perSensorMin[key] = value
+        if not key in self.perSensorMax or value > self.perSensorMax[key]:
+            self.perSensorMax[key] = value
+        if value > self.globalMax:
+            self.globalMax = value
+        #return round(self.exp_average(key, value), 2)
+        #return self.exp_minmax(tile, key, value)
+        rangeMin = self.perSensorMin[key]
+        rangeMax = max(self.globalMax, DEFAULT_MAXIMUM_PRESSURE)
+        rv = float(value-rangeMin) / (rangeMax-rangeMin)
+        return rv
+        
+    
 class SensorReceiver:
     def __init__(self, comport, server):
         self.comport = comport
         self.server = server
         self.runningAverage = defaultdict(float)
-        self.globalMax = 0
+        self.mainAdapter = SensorValueAdapter()
+        self.swipeAdapter = SensorValueAdapter()
 
+    def get_adapter(self, tile):
+        if tile == SWIPE_TILE: return self.swipeAdapter
+        return self.mainAdapter
+        
     def exp_average(self, key, val, alpha=0.2):
         """ Computes exponential running average for the given value.
         This function computes an exponential running average for the parameter
@@ -79,8 +109,6 @@ class SensorReceiver:
         return self.runningAverage[key]
 
     def exp_minmax(self, tile, key, val):
-        if val > self.globalMax:
-            self.globalMax = val
         ravg = self.exp_average(key, val)
         curMin = ravg / 2
         curMax = self.globalMax
@@ -88,11 +116,6 @@ class SensorReceiver:
         val = max(val, curMin)
         val = min(val, curMax)
         return (val-curMin) / (curMax-curMin)
-        
-    def process_value(self, tile, key, value):
-        #return round(self.exp_average(key, value), 2)
-        #return self.exp_minmax(tile, key, value)
-        return value / 256.0
         
     def run(self):
         while True:
@@ -111,7 +134,10 @@ class SensorReceiver:
                         value = data[key]
                         del data[key]
                         key = '%ss%s' % (tile, key)
-                        data[key] = self.process_value(tile, key, value)
+                        adapter = self.get_adapter(tile)
+                        value = adapter.process_value(tile, key, value)
+                        # value = self.exp_average(key, val)
+                        data[key] = value
 
                 if VERBOSE:
                     # print result with timestamp to stdout
