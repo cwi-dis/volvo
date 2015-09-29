@@ -70,19 +70,9 @@ void setup () {
 
 }
 
-void loop () {
-  // wait for an incoming empty packet for us
-  if (rf12_recvDone() && rf12_crc == 0 && rf12_len == 0 && RF12_WANTS_ACK) {
-    // read battery status
-    payload.lowbat = rf12_lowbat();
-    IFDEBUG { if (payload.lowbat) Serial.print("LOWBAT "); }
-    // read data from the analog pins and store it into the payload struct
-#ifdef POWERSAVETIMEOUT
-    lastReceptionTime = millis();
-#endif
-    IFDEBUG Serial.print("poll ");
-    int i = 0;
-    for (int row=0; row<NROW; row++) {
+void readSensors() {
+  int i = 0;
+  for (int row=0; row<NROW; row++) {
       // Enable this row of sensors
       ports[row].digiWrite(LOW);
       // Not needed? delay(10);
@@ -96,8 +86,22 @@ void loop () {
         IFDEBUG Serial.print(' ');
       }
       ports[row].digiWrite(HIGH);
-    }
-    IFDEBUG Serial.println();
+  }
+  IFDEBUG Serial.println();
+}
+
+void loop () {
+  // wait for an incoming empty packet for us
+  if (rf12_recvDone() && rf12_crc == 0 && rf12_len == 0 && RF12_WANTS_ACK) {
+    // read battery status
+    payload.lowbat = rf12_lowbat();
+    IFDEBUG { if (payload.lowbat) Serial.print("LOWBAT "); }
+    // read data from the analog pins and store it into the payload struct
+#ifdef POWERSAVETIMEOUT
+    lastReceptionTime = millis();
+#endif
+    IFDEBUG Serial.println("poll ");
+    // Note that we transmit the data that we collected in the previous loop
     // start transmission
     rf12_sendStart(RF12_ACK_REPLY, &payload, sizeof payload);
 #ifdef NAP_AFTER_POLL
@@ -107,8 +111,8 @@ void loop () {
     rf12_sleep(RF12_WAKEUP);
  #endif 
   }
-#ifdef POWERSAVETIMEOUT
   else {
+#ifdef POWERSAVETIMEOUT
     if (millis() > lastReceptionTime + POWERSAVETIMEOUT) {
       IFDEBUG { Serial.println("Sleep"); delay(10); }
       rf12_sleep(RF12_SLEEP);
@@ -117,7 +121,7 @@ void loop () {
       lastReceptionTime = millis();
       IFDEBUG Serial.println("Wakeup");
     }
-  }
 #endif
-
+    readSensors();
+  }
 }

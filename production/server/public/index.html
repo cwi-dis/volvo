@@ -30,6 +30,7 @@
 			var collection = {};
 
 			function get_from_cache( selector ) {
+				return $(selector);
 				if ( undefined === collection[ selector ] ) {
 					collection[ selector ] = $( selector );
 				}
@@ -80,11 +81,12 @@
 							
                             // set the resulting lightness of the various polygons whose number
                             // match the dictionary key in the perspective SVG
+                            var myget = $; // Or selectors.get;
                             
-                            selectors.get(key_3d).setHSLA(120, 0, lightness, 1.0);
-                            selectors.get(key_plan).setHSLA(120, 0, lightness, 1.0);
-                            selectors.get(key_side).setHSLA(120, 0, lightness, 1.0);
-                            selectors.get(key_swipe).setHSLA(120, 0, lightness, 1.0);
+                            myget(key_3d).setHSLA(120, 0, lightness, 1.0);
+                            myget(key_plan).setHSLA(120, 0, lightness, 1.0);
+                            myget(key_side).setHSLA(120, 0, lightness, 1.0);
+                            myget(key_swipe).setHSLA(120, 0, lightness, 1.0);
 
                         }
                     }
