@@ -26,7 +26,7 @@ from sensorrelay import WebsocketPublisher
 from serial import Serial
 from serial.tools import list_ports
 
-VERBOSE=False
+VERBOSE=True
 
 DEFAULT_MAXIMUM_PRESSURE = 2      # Defaul value (and minimal value) for pressure that is seen as 100%
 SWIPE_TILE = 9                     # Tile with 9 sensors used as a slider
