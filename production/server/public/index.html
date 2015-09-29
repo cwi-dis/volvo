@@ -65,6 +65,7 @@
                 // Where the keys are sensor IDs and the values the corresponding
                 // pressure values.
                 relay.subscribe('pressure', function (values) {
+					var myget = $; // Or selectors.get;
                     // iterate through the received dictionary
                     for (var key in values) {
                         if (values.hasOwnProperty(key)) {
@@ -76,12 +77,10 @@
 							var key_3d = "#threed" + key + "_2_";
 							var key_plan = "#plan" + key + "_2_";
 							var key_side = "#side" + key + "_1_";
-							// Hand remains TBD
 							var key_swipe = "#swipe" + key + "_2_";
 							
                             // set the resulting lightness of the various polygons whose number
                             // match the dictionary key in the perspective SVG
-                            var myget = $; // Or selectors.get;
                             
                             myget(key_3d).setHSLA(120, 0, lightness, 1.0);
                             myget(key_plan).setHSLA(120, 0, lightness, 1.0);
@@ -90,6 +89,11 @@
 
                         }
                     }
+                    // Do blocking of hand/scanning/loaded
+                    if ("hidehand" in values) myget("#handBlock_2_").setHSLA(120, 0, 0, values.hidehand);
+                    if ("hidescanning" in values) myget("#scanningBlock_2_").setHSLA(120, 0, 0, values.hidescanning);
+                    if ("hideloaded" in values) myget("#profileBlock_2_").setHSLA(120, 0, 0, values.hideloaded);
+                    	
                 });
             });
         });

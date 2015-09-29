@@ -26,7 +26,7 @@ from sensorrelay import WebsocketPublisher
 from serial import Serial
 from serial.tools import list_ports
 
-VERBOSE=False
+VERBOSE=True
 DOTS=True
 
 DEFAULT_MAXIMUM_PRESSURE = 2      # Defaul value (and minimal value) for pressure that is seen as 100%
@@ -87,14 +87,40 @@ class SensorValueCollector:
         return self.curValues
         
 class HandSensorValueCollector(SensorValueCollector):
+    def __init__(self):
+        SensorValueCollector.__init__(self)
+        self.depressTime = None
+        self.releaseTime = None
 
     def get_values(self):
         rv = {}
-        if not self.curValues:
-            return rv
-        value = max(self.curValues.values())
-        for k in self.curValues.keys():
-            rv[k] = value
+        if self.curValues:
+            value = max(self.curValues.values())
+            for k in self.curValues.keys():
+                rv[k] = self.curValues[k]
+            if value:
+                rv['hidehand'] = 0
+            else:
+                rv['hidehand'] = 1
+            rv['hidescanning'] = 1
+            rv['hideloaded'] = 1
+            if value and self.depressTime == None:
+                # Hand has just been pressed.
+                self.depressTime = time.time()
+                self.releaseTime = None
+            elif not value and self.releaseTime == None and self.depressTime:
+                # Hand has just been released
+                if time.time() >= self.depressTime + 2:
+                    # It was depressed for over 2 seconds
+                    self.releaseTime = time.time()
+                self.depressTime = None
+            if self.depressTime:
+                if time.time() < self.depressTime + 2:
+                    rv['hidescanning'] = 0
+                else:
+                    rv['hideloaded'] = 0
+            elif self.releaseTime and time.time() < self.releaseTime+5:
+                rv['hideloaded'] = 0
         return rv
         
 class SwipeSensorValueCollector(SensorValueCollector):
@@ -143,7 +169,7 @@ class SensorReceiver:
         self.server = server
         self.runningAverage = defaultdict(float)
         self.collectors = {
-            1: SensorValueCollector(),
+            1: HandSensorValueCollector(),
             2: SensorValueCollector(),
             3: SensorValueCollector(),
             4: SensorValueCollector(),
