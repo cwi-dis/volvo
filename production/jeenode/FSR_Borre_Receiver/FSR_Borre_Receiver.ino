@@ -70,7 +70,7 @@ void loop () {
       Serial.print("{\"n\":"); 
       Serial.print(nextId);
       Serial.print(", ");
-      if (p->magic != MAGIC) {
+      if (p->magic != MAGIC || p->node != nextId) {
         Serial.println("\"error\":\"badResponse\"}");
         return;
       }
