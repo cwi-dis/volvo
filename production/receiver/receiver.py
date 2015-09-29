@@ -28,6 +28,7 @@ from serial.tools import list_ports
 
 VERBOSE=True
 DOTS=True
+AVERAGE=True
 
 DEFAULT_MAXIMUM_PRESSURE = 2      # Defaul value (and minimal value) for pressure that is seen as 100%
 
@@ -180,7 +181,7 @@ class SensorReceiver:
             9: SwipeSensorValueCollector(),
             }
 
-    def exp_average(self, key, val, alpha=0.2):
+    def exp_average(self, key, val, alpha=0.9):
         """ Computes exponential running average for the given value.
         This function computes an exponential running average for the parameter
         'val'. The parameter 'key' designates the sensor ID for which the moving
@@ -194,18 +195,9 @@ class SensorReceiver:
         adequate response times given the data for which this is intended to be
         used.
         """
-        self.runningAverage[key] = (alpha * val) + (1.0 - alpha) * self.runningAverage[key]
+        self.runningAverage[key] = round((alpha * val) + (1.0 - alpha) * self.runningAverage[key], 2)
         return self.runningAverage[key]
 
-    def exp_minmax(self, tile, key, val):
-        ravg = self.exp_average(key, val)
-        curMin = ravg / 2
-        curMax = self.globalMax
-        if curMax == curMin: return 0
-        val = max(val, curMin)
-        val = min(val, curMax)
-        return (val-curMin) / (curMax-curMin)
-        
     def run(self):
         transmitStorage = {}
         transmitStorageTiles = set()
@@ -247,7 +239,11 @@ class SensorReceiver:
             if tile in transmitStorageTiles:
                 # Get current data for all tiles
                 for collector in self.collectors.values():
-                    transmitStorage.update(collector.get_values())
+                    to_add = collector.get_values()
+                    if AVERAGE:
+                        for k in to_add.keys():
+                            to_add[k] = self.exp_average(k, to_add[k])
+                    transmitStorage.update(to_add)
                     
                 if VERBOSE:
                     # print result with timestamp to stdout
