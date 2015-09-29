@@ -26,10 +26,11 @@ from sensorrelay import WebsocketPublisher
 from serial import Serial
 from serial.tools import list_ports
 
-VERBOSE=True
+VERBOSE=False
+DOTS=True
 
 DEFAULT_MAXIMUM_PRESSURE = 2      # Defaul value (and minimal value) for pressure that is seen as 100%
-SWIPE_TILE = 9                     # Tile with 9 sensors used as a slider
+
 SWIPE_TIMEOUT = 1.0                # A swipe remains active for at least one second
 
 def get_portname():
@@ -58,10 +59,11 @@ def get_ws_host():
 
     return ws_host
 
-class SensorValueAdapter:
+class SensorValueCollector:
     def __init__(self):
         self.perSensorMin = {}
         self.perSensorMax = {}
+        self.curValues = {}
 
     def process_value(self, tile, key, value):
         # Keep per-sensor minimal and maximal value and global maximum
@@ -74,19 +76,37 @@ class SensorValueAdapter:
         rangeMin = self.perSensorMin[key]
         rangeMax = max(self.perSensorMin[key]+DEFAULT_MAXIMUM_PRESSURE, self.perSensorMax[key])
         rv = float(value-rangeMin) / (rangeMax-rangeMin)
-        if rv > 0.5: return 1.0
-        return 0.0
+        if rv > 0.5:
+            rv = 1.0
+        else:
+            rv = 0.0
+        self.curValues[key] = rv
+        return rv
         
-class SwipeSensorValueAdapter(SensorValueAdapter):
+    def get_values(self):
+        return self.curValues
+        
+class HandSensorValueCollector(SensorValueCollector):
+
+    def get_values(self):
+        rv = {}
+        if not self.curValues:
+            return rv
+        value = max(self.curValues.values())
+        for k in self.curValues.keys():
+            rv[k] = value
+        return rv
+        
+class SwipeSensorValueCollector(SensorValueCollector):
     def __init__(self):
-        SensorValueAdapter.__init__(self)
+        SensorValueCollector.__init__(self)
         self.active = False
         self.firstSensor = None
         self.lastSensor = None
         self.swipeStartTime = None
         
     def process_value(self, tile, key, value):
-        value = SensorValueAdapter.process_value(self, tile, key, value)
+        value = SensorValueCollector.process_value(self, tile, key, value)
         if value > 0:
             # This sensor is pressed. Update start and end of swipe, and swipe active time.
             self.swipeStartTime = time.time()
@@ -106,19 +126,34 @@ class SwipeSensorValueAdapter(SensorValueAdapter):
             if self.firstSensor <= key and self.lastSensor >= key:
                 value = 1.0
         return value
+    
+    def get_values(self):
+        rv = {}
+        for k in self.curValues.keys():
+            if self.swipeStartTime and self.firstSensor <= k and self.lastSensor >= k:
+                value = 1.0
+            else:
+                value = 0.0
+            rv[k] = value
+        return rv
         
 class SensorReceiver:
     def __init__(self, comport, server):
         self.comport = comport
         self.server = server
         self.runningAverage = defaultdict(float)
-        self.mainAdapter = SensorValueAdapter()
-        self.swipeAdapter = SwipeSensorValueAdapter()
+        self.collectors = {
+            1: SensorValueCollector(),
+            2: SensorValueCollector(),
+            3: SensorValueCollector(),
+            4: SensorValueCollector(),
+            5: SensorValueCollector(),
+            6: SensorValueCollector(),
+            7: SensorValueCollector(),
+            8: HandSensorValueCollector(),
+            9: SwipeSensorValueCollector(),
+            }
 
-    def get_adapter(self, tile):
-        if tile == SWIPE_TILE: return self.swipeAdapter
-        return self.mainAdapter
-        
     def exp_average(self, key, val, alpha=0.2):
         """ Computes exponential running average for the given value.
         This function computes an exponential running average for the parameter
@@ -155,47 +190,55 @@ class SensorReceiver:
             try:
                 # parse line read from serial port as JSON
                 data = json.loads(result)
+            except ValueError:
+                # skip to next iteration if JSON parsing causes an exception
+                sys.stdout.write("JSON parser raised ValueError on %s" % repr(result))
+                continue
 
-                # apply exponential smoothing to each value in the data,
-                # but only for the keys that are sensor values
-                tile = data['n']
-                del data['n']
+            # apply exponential smoothing to each value in the data,
+            # but only for the keys that are sensor values
+            tile = data['n']
+            collector = self.collectors[tile]
+            if VERBOSE:
+                # print result with timestamp to stdout
+                now = time.time()
+                sys.stdout.write("%.2f .. %s\n" % (now, str(data)))
+                sys.stdout.flush()
+            for key in data.keys():
+                if key == 'n': continue
+                value = data[key]
+                if key.isdigit():
+                    key = '%ss%s' % (tile, key)
+                    value = collector.process_value(tile, key, value)
+                else:
+                    # Non-sensor data items are stored into the transmitStorage directly
+                    key = '%s%s' % (tile, key)
+                    transmitStorage[key] = value
+
+            # 
+            # Save the data, possibly transmitting if we have a full set
+            #
+            if tile in transmitStorageTiles:
+                # Get current data for all tiles
+                for collector in self.collectors.values():
+                    transmitStorage.update(collector.get_values())
+                    
                 if VERBOSE:
                     # print result with timestamp to stdout
                     now = time.time()
-                    sys.stdout.write("%.2f .. %s\n" % (now, str(data)))
+                    sys.stdout.write("%.2f => %s\n" % (now, str(transmitStorage)))
                     sys.stdout.flush()
-                for key in data.keys():
-                    value = data[key]
-                    del data[key]
-                    if key.isdigit():
-                        key = '%ss%s' % (tile, key)
-                        adapter = self.get_adapter(tile)
-                        value = adapter.process_value(tile, key, value)
-                        # value = self.exp_average(key, val)
-                        data[key] = value
-                    else:
-                        key = '%s%s' % (tile, key)
-                        data[key] = value
-
-                # 
-                # Save the data, possibly transmitting if we have a full set
-                #
-                if tile in transmitStorageTiles:
-                    if VERBOSE:
-                        # print result with timestamp to stdout
-                        now = time.time()
-                        sys.stdout.write("%.2f => %s\n" % (now, str(transmitStorage)))
-                        sys.stdout.flush()
-                        if self.server:
-                            self.server.publish('pressure', transmitStorage)
-                        transmitStorage = {}
-                        transmitStorageTiles = set()
-                transmitStorage.update(data)
-                transmitStorageTiles.add(tile)
-            except ValueError:
-                # skip to next iteration if JSON parsing causes an exception
-                pass
+                    
+                if self.server:
+                    self.server.publish('pressure', transmitStorage)
+                    if DOTS:
+                        sys.stderr.write(".")
+                        sys.stderr.flush()
+                    
+                transmitStorage = {}
+                transmitStorageTiles = set()
+                    
+            transmitStorageTiles.add(tile)
 
 def main():
     port, ws_host = "", ""
