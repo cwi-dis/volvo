@@ -26,7 +26,7 @@ from sensorrelay import WebsocketPublisher
 from serial import Serial
 from serial.tools import list_ports
 
-VERBOSE=True
+VERBOSE=False
 DOTS=True
 AVERAGE=True
 

@@ -81,13 +81,19 @@ void readSensors() {
       	// the ADC
         uint16_t value; //  = ports[col].anaRead();
         value = ports[col].anaRead();
-        payload.data[i++] = (1023-value) >> 2;
+        uint8_t newval = (1023-value) >> 2;
+        if (newval > payload.data[i]) payload.data[i] = newval;
+        i++;
         IFDEBUG Serial.print((int)value);
         IFDEBUG Serial.print(' ');
       }
       ports[row].digiWrite(HIGH);
   }
   IFDEBUG Serial.println();
+}
+
+void clearSensors() {
+  for (int i=0; i<NSENSOR; i++) payload.data[i] = 0;
 }
 
 void loop () {
@@ -104,8 +110,9 @@ void loop () {
     // Note that we transmit the data that we collected in the previous loop
     // start transmission
     rf12_sendStart(RF12_ACK_REPLY, &payload, sizeof payload);
+    rf12_sendWait(1);   // Wait for transmission completion with CPU in IDLE mode
+    clearSensors();
 #ifdef NAP_AFTER_POLL
-    rf12_sendWait(1);   // Wit for transmission completion with CPU in IDLE mode
     rf12_sleep(RF12_SLEEP);
     Sleepy::loseSomeTime(NAP_AFTER_POLL);
     rf12_sleep(RF12_WAKEUP);
