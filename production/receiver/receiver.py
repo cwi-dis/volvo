@@ -26,7 +26,7 @@ from sensorrelay import WebsocketPublisher
 from serial import Serial
 from serial.tools import list_ports
 
-VERBOSE=True
+VERBOSE=False
 
 DEFAULT_MAXIMUM_PRESSURE = 2      # Defaul value (and minimal value) for pressure that is seen as 100%
 SWIPE_TILE = 9                     # Tile with 9 sensors used as a slider
@@ -146,6 +146,8 @@ class SensorReceiver:
         return (val-curMin) / (curMax-curMin)
         
     def run(self):
+        transmitStorage = {}
+        transmitStorageTiles = set()
         while True:
             # read line from serial port
             result = self.comport.readline()
@@ -157,30 +159,40 @@ class SensorReceiver:
                 # apply exponential smoothing to each value in the data,
                 # but only for the keys that are sensor values
                 tile = data['n']
+                del data['n']
                 if VERBOSE:
                     # print result with timestamp to stdout
                     now = time.time()
                     sys.stdout.write("%.2f .. %s\n" % (now, str(data)))
                     sys.stdout.flush()
                 for key in data.keys():
+                    value = data[key]
+                    del data[key]
                     if key.isdigit():
-                        value = data[key]
-                        del data[key]
                         key = '%ss%s' % (tile, key)
                         adapter = self.get_adapter(tile)
                         value = adapter.process_value(tile, key, value)
                         # value = self.exp_average(key, val)
                         data[key] = value
+                    else:
+                        key = '%s%s' % (tile, key)
+                        data[key] = value
 
-                if VERBOSE:
-                    # print result with timestamp to stdout
-                    now = time.time()
-                    sys.stdout.write("%.2f => %s\n" % (now, str(data)))
-                    sys.stdout.flush()
-
-                # publish data on channel 'pressure'
-                if self.server:
-                    self.server.publish('pressure', data)
+                # 
+                # Save the data, possibly transmitting if we have a full set
+                #
+                if tile in transmitStorageTiles:
+                    if VERBOSE:
+                        # print result with timestamp to stdout
+                        now = time.time()
+                        sys.stdout.write("%.2f => %s\n" % (now, str(transmitStorage)))
+                        sys.stdout.flush()
+                        if self.server:
+                            self.server.publish('pressure', transmitStorage)
+                        transmitStorage = {}
+                        transmitStorageTiles = set()
+                transmitStorage.update(data)
+                transmitStorageTiles.add(tile)
             except ValueError:
                 # skip to next iteration if JSON parsing causes an exception
                 pass

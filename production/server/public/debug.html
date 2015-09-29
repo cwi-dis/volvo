@@ -39,13 +39,15 @@
 			relay.subscribe('pressure', function (values) {
 
 				// set (or clear) the per-tile error string
-				var error_id = "#error_" + values.n;
-				var error_string = "";
-				if (values.hasOwnProperty("error")) {
-					error_string = values.error;
+				for(var i=1; i<=9; i++) {
+					var error_id = "#error_" + i;
+					var error_string = "";
+					var key_name = ""+i+"error";
+					if (values.hasOwnProperty(key_name)) {
+						error_string = values[key_name];
+					}
+					$(error_id).text(error_string);
 				}
-				$(error_id).text(error_string);
-
 				// iterate through the received dictionary				
 				for (var key in values) {
 					if (values.hasOwnProperty(key)) {
