@@ -8,6 +8,6 @@ killall npm
 killall 'Google Chrome'
 
 sh $dirname/runserver.sh &
-sleep 5
+sleep 10
 sh $dirname/runvisualisation.sh &
 exec $dirname/runreceiver.sh

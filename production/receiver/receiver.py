@@ -26,9 +26,10 @@ from sensorrelay import WebsocketPublisher
 from serial import Serial
 from serial.tools import list_ports
 
-VERBOSE=False
+VERBOSE=True
 DOTS=True
 AVERAGE=True
+RAW=True
 
 DEFAULT_MAXIMUM_PRESSURE = 3      # Defaul value (and minimal value) for pressure that is seen as 100%
 
@@ -60,27 +61,41 @@ def get_ws_host():
 
     return ws_host
 
-class SensorValueCollector:
+class RawSensorValueCollector:
     def __init__(self):
-        self.perSensorMin = {}
-        self.perSensorMax = {}
         self.curValues = {}
         self._ignore = ()
-        self.defaultMaximumPressure = DEFAULT_MAXIMUM_PRESSURE
-        
-    def ignore(self, *keys):
-    	self._ignore = keys
-        
 
+    def ignore(self, *keys):
+        self._ignore = keys
+        
     def process_value(self, tile, key, value):
-    	if key in self._ignore: return 0.0
+        if key in self._ignore: return 0.0
+        value = float(value) / 256.0
+        self.curValues[key] = value
+        return value
+        
+    def get_values(self):
+        return self.curValues
+            
+class SensorValueCollector(RawSensorValueCollector):
+    def __init__(self):
+        RawSensorValueCollector.__init__(self)
+        self.perSensorMin = {}
+        self.perSensorMax = {}
+        self.defaultMaximumPressure = DEFAULT_MAXIMUM_PRESSURE
+        self.autoCalibrate = True
+        
+    def process_value(self, tile, key, value):
+        if key in self._ignore: return 0.0
         # Keep per-sensor minimal and maximal value and global maximum
         if not key in self.perSensorMin or value < self.perSensorMin[key]:
             self.perSensorMin[key] = value
-            # Also optionally adjust default maximum, to cater for tiles that
-            # are too tight
-            if value*2 > self.defaultMaximumPressure:
-            	self.defaultMaximumPressure = value*2
+            if self.autoCalibrate:
+                # Also optionally adjust default maximum, to cater for tiles that
+                # are too tight
+                if value*2 > self.defaultMaximumPressure:
+                    self.defaultMaximumPressure = value*2
         if not key in self.perSensorMax or value > self.perSensorMax[key]:
             self.perSensorMax[key] = value
         else:
@@ -94,9 +109,6 @@ class SensorValueCollector:
             rv = 0.0
         self.curValues[key] = rv
         return rv
-        
-    def get_values(self):
-        return self.curValues
         
 class HandSensorValueCollector(SensorValueCollector):
     def __init__(self):
@@ -180,19 +192,26 @@ class SensorReceiver:
         self.comport = comport
         self.server = server
         self.runningAverage = defaultdict(float)
-        self.collectors = {
-            1: SensorValueCollector(),
-            2: SensorValueCollector(),
-            3: SensorValueCollector(),
-            4: SensorValueCollector(),
-            5: SensorValueCollector(),
-            6: SensorValueCollector(),
-            7: SensorValueCollector(),
-            8: HandSensorValueCollector(),
-            9: SwipeSensorValueCollector(),
-            }
-        self.collectors[7].ignore('7s3')	# Tile 7 is the small tile with 2 sensors
-        self.collectors[8].ignore('8s2', '8s3')	# Tile 8 is the hand tile with one sensor
+        if RAW:
+            self.collectors = {}
+            for i in range(1, 10):
+                self.collectors[i] = RawSensorValueCollector()
+        else:
+            self.collectors = {
+                1: SensorValueCollector(),
+                2: SensorValueCollector(),
+                3: SensorValueCollector(),
+                4: SensorValueCollector(),
+                5: SensorValueCollector(),
+                6: SensorValueCollector(),
+                7: SensorValueCollector(),
+                8: HandSensorValueCollector(),
+                9: SwipeSensorValueCollector(),
+                }
+        self.collectors[7].ignore('7s3')    # Tile 7 is the small tile with 2 sensors
+        self.collectors[8].ignore('8s2', '8s3') # Tile 8 is the hand tile with one sensor
+        self.collectors[9].autoCalibrate = False
+        self.collectors[9].defaultMaximumPressure = 2
 
     def exp_average(self, key, val, alpha=0.9):
         """ Computes exponential running average for the given value.
