@@ -14,7 +14,7 @@ const byte NUM_NODES = 9; // poll using node ID from 1 to NUM_NODES
 #define MAGIC 43  // Magic number that signals an ACK comes from our sensors
 
 #define POLL_TIMEOUT 20  // How many milliseconds to wait for poll reply
-#define MAX_POLL_FREQ 50  // Poll sensors at most 50 times per second
+#define MAX_POLL_FREQ 10  // Poll sensors at most 25 times per second
 #ifdef MAX_POLL_FREQ
 // If the poll frequency is maximised the sensors can powerdown
 // after a poll, because they know they will not be polled again for a
@@ -69,7 +69,7 @@ void loop () {
       
       Serial.print("{\"n\":"); 
       Serial.print(nextId);
-      Serial.print(", ");
+      Serial.print(",");
       if (p->magic != MAGIC || p->node != nextId) {
         Serial.println("\"error\":\"badResponse\"}");
         return;
@@ -83,8 +83,8 @@ void loop () {
       }
       for(int i=0; i<count; i++) {
         int value = p->data[i];
-        Serial.print("\""); Serial.print(i+1); Serial.print("\": "); Serial.print(value);  
-        if (i < count-1) Serial.print(", ");            
+        Serial.print("\""); Serial.print(i+1); Serial.print("\":"); Serial.print(value);  
+        if (i < count-1) Serial.print(",");            
       }
       Serial.println("}");    
       return;
@@ -92,6 +92,6 @@ void loop () {
   }
   Serial.print("{\"n\":"); 
   Serial.print(nextId);
-  Serial.print(", ");
+  Serial.print(",");
   Serial.println("\"error\":\"noResponse\"}");
  }

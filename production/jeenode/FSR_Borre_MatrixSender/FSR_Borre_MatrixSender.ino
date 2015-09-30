@@ -21,7 +21,7 @@
 //
 #define POWERSAVETIMEOUT 10000    // Go to sleep after 10 seconds of no polls received
 #define POWERSAVEDURATION 60000   // Go to sleep for 60 seconds
-#undef NAP_AFTER_POLL 40  // Nap for 15ms after a poll
+#undef NAP_AFTER_POLL
 
 #ifdef POWERSAVETIMEOUT 
 unsigned long lastReceptionTime;
