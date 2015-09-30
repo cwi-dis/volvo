@@ -70,25 +70,27 @@ void setup () {
 
 }
 
+int nextRowToRead = 0;
+
 void readSensors() {
-  int i = 0;
-  for (int row=0; row<NROW; row++) {
-      // Enable this row of sensors
-      ports[row].digiWrite(LOW);
-      // Not needed? delay(10);
-      for (int col=0; col < NCOLUMN; col++) {
-      	// It is suggested to discard one analog reading to stabilize
-      	// the ADC
-        uint16_t value; //  = ports[col].anaRead();
-        value = ports[col].anaRead();
-        uint8_t newval = (1023-value) >> 2;
-        if (newval > payload.data[i]) payload.data[i] = newval;
-        i++;
-        IFDEBUG Serial.print((int)value);
-        IFDEBUG Serial.print(' ');
-      }
-      ports[row].digiWrite(HIGH);
+  int row = nextRowToRead++;
+  if (nextRowToRead >= NROW) nextRowToRead = 0;
+  // Enable this row of sensors
+  ports[row].digiWrite(LOW);
+  // Not needed? delay(10);
+  for (int col=0; col < NCOLUMN; col++) {
+  	// It is suggested to discard one analog reading to stabilize
+  	// the ADC
+    uint16_t value; //  = ports[col].anaRead();
+    value = ports[col].anaRead();
+    uint8_t newval = (1023-value) >> 2;
+    int i = row*NCOLUMN + col;
+    if (newval > payload.data[i]) payload.data[i] = newval;
+    i++;
+    IFDEBUG Serial.print((int)value);
+    IFDEBUG Serial.print(' ');
   }
+  ports[row].digiWrite(HIGH);
   IFDEBUG Serial.println();
 }
 
