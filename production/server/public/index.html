@@ -97,7 +97,9 @@
                         }
                     }
                     // Do blocking of hand/scanning/loaded
-                    if ("hidehand" in values) myget("#handBlock_2_").setHSLA(120, 0, 0, values.hidehand);
+                    if ("hidehand" in values) {
+                    	myget("#handfillcircle").attr("r", 20-(values.hidehand*20));
+                    }
                     if ("hidescanning" in values) myget("#scanningBlock_2_").setHSLA(120, 0, 0, values.hidescanning);
                     if ("hideloaded" in values) myget("#profileBlock_2_").setHSLA(120, 0, 0, values.hideloaded);
                     	
