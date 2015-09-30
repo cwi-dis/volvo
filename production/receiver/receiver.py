@@ -29,7 +29,7 @@ from serial.tools import list_ports
 VERBOSE=True
 DOTS=True
 AVERAGE=True
-RAW=True
+RAW=False
 
 DEFAULT_MAXIMUM_PRESSURE = 3      # Defaul value (and minimal value) for pressure that is seen as 100%
 
@@ -213,7 +213,7 @@ class SensorReceiver:
         self.collectors[9].autoCalibrate = False
         self.collectors[9].defaultMaximumPressure = 2
 
-    def exp_average(self, key, val, alpha=0.9):
+    def exp_average(self, key, val, alpha=0.4):
         """ Computes exponential running average for the given value.
         This function computes an exponential running average for the parameter
         'val'. The parameter 'key' designates the sensor ID for which the moving
