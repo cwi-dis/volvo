@@ -30,7 +30,7 @@ VERBOSE=False
 DOTS=True
 AVERAGE=True
 
-DEFAULT_MAXIMUM_PRESSURE = 2      # Defaul value (and minimal value) for pressure that is seen as 100%
+DEFAULT_MAXIMUM_PRESSURE = 3      # Defaul value (and minimal value) for pressure that is seen as 100%
 
 SWIPE_TIMEOUT = 1.0                # A swipe remains active for at least one second
 
@@ -65,17 +65,28 @@ class SensorValueCollector:
         self.perSensorMin = {}
         self.perSensorMax = {}
         self.curValues = {}
+        self._ignore = ()
+        self.defaultMaximumPressure = DEFAULT_MAXIMUM_PRESSURE
+        
+    def ignore(self, *keys):
+    	self._ignore = keys
+        
 
     def process_value(self, tile, key, value):
+    	if key in self._ignore: return 0.0
         # Keep per-sensor minimal and maximal value and global maximum
         if not key in self.perSensorMin or value < self.perSensorMin[key]:
             self.perSensorMin[key] = value
+            # Also optionally adjust default maximum, to cater for tiles that
+            # are too tight
+            if value*2 > self.defaultMaximumPressure:
+            	self.defaultMaximumPressure = value*2
         if not key in self.perSensorMax or value > self.perSensorMax[key]:
             self.perSensorMax[key] = value
         else:
             self.perSensorMax[key] -= 1
         rangeMin = self.perSensorMin[key]
-        rangeMax = max(self.perSensorMin[key]+DEFAULT_MAXIMUM_PRESSURE, self.perSensorMax[key])
+        rangeMax = max(self.perSensorMin[key]+self.defaultMaximumPressure, self.perSensorMax[key])
         rv = float(value-rangeMin) / (rangeMax-rangeMin)
         if rv > 0.5:
             rv = 1.0
@@ -170,7 +181,7 @@ class SensorReceiver:
         self.server = server
         self.runningAverage = defaultdict(float)
         self.collectors = {
-            1: HandSensorValueCollector(),
+            1: SensorValueCollector(),
             2: SensorValueCollector(),
             3: SensorValueCollector(),
             4: SensorValueCollector(),
@@ -180,6 +191,8 @@ class SensorReceiver:
             8: HandSensorValueCollector(),
             9: SwipeSensorValueCollector(),
             }
+        self.collectors[7].ignore('7s3')	# Tile 7 is the small tile with 2 sensors
+        self.collectors[8].ignore('8s2', '8s3')	# Tile 8 is the hand tile with one sensor
 
     def exp_average(self, key, val, alpha=0.9):
         """ Computes exponential running average for the given value.
