@@ -1,0 +1,72 @@
+		<defs>
+			<pattern id="plan1s1fill" x="10" y="10" width="20" height="20" patternUnits="userSpaceOnUse" patternTransform="rotate(45)" >
+			  <circle id="plan1s1fillcircle" cx="10" cy="10" r="1" style="stroke: none; fill: white"/>
+			</pattern>
+			<pattern id="plan1s2fill" x="10" y="10" width="20" height="20" patternUnits="userSpaceOnUse" patternTransform="rotate(45)" >
+			  <circle id="plan1s2fillcircle" cx="10" cy="10" r="1" style="stroke: none; fill: white"/>
+			</pattern>
+			<pattern id="plan1s3fill" x="10" y="10" width="20" height="20" patternUnits="userSpaceOnUse" patternTransform="rotate(45)" >
+			  <circle id="plan1s3fillcircle" cx="10" cy="10" r="1" style="stroke: none; fill: white"/>
+			</pattern>
+
+			<pattern id="plan2s1fill" x="10" y="10" width="20" height="20" patternUnits="userSpaceOnUse" patternTransform="rotate(45)" >
+			  <circle id="plan2s1fillcircle" cx="10" cy="10" r="1" style="stroke: none; fill: white"/>
+			</pattern>
+			<pattern id="plan2s2fill" x="10" y="10" width="20" height="20" patternUnits="userSpaceOnUse" patternTransform="rotate(45)" >
+			  <circle id="plan2s2fillcircle" cx="10" cy="10" r="1" style="stroke: none; fill: white"/>
+			</pattern>
+			<pattern id="plan2s3fill" x="10" y="10" width="20" height="20" patternUnits="userSpaceOnUse" patternTransform="rotate(45)" >
+			  <circle id="plan2s3fillcircle" cx="10" cy="10" r="1" style="stroke: none; fill: white"/>
+			</pattern>
+
+			<pattern id="plan3s1fill" x="10" y="10" width="20" height="20" patternUnits="userSpaceOnUse" patternTransform="rotate(45)" >
+			  <circle id="plan3s1fillcircle" cx="10" cy="10" r="1" style="stroke: none; fill: white"/>
+			</pattern>
+			<pattern id="plan3s2fill" x="10" y="10" width="20" height="20" patternUnits="userSpaceOnUse" patternTransform="rotate(45)" >
+			  <circle id="plan3s2fillcircle" cx="10" cy="10" r="1" style="stroke: none; fill: white"/>
+			</pattern>
+			<pattern id="plan3s3fill" x="10" y="10" width="20" height="20" patternUnits="userSpaceOnUse" patternTransform="rotate(45)" >
+			  <circle id="plan3s3fillcircle" cx="10" cy="10" r="1" style="stroke: none; fill: white"/>
+			</pattern>
+
+			<pattern id="plan4s1fill" x="10" y="10" width="20" height="20" patternUnits="userSpaceOnUse" patternTransform="rotate(45)" >
+			  <circle id="plan4s1fillcircle" cx="10" cy="10" r="1" style="stroke: none; fill: white"/>
+			</pattern>
+			<pattern id="plan4s2fill" x="10" y="10" width="20" height="20" patternUnits="userSpaceOnUse" patternTransform="rotate(45)" >
+			  <circle id="plan4s2fillcircle" cx="10" cy="10" r="1" style="stroke: none; fill: white"/>
+			</pattern>
+			<pattern id="plan4s3fill" x="10" y="10" width="20" height="20" patternUnits="userSpaceOnUse" patternTransform="rotate(45)" >
+			  <circle id="plan4s3fillcircle" cx="10" cy="10" r="1" style="stroke: none; fill: white"/>
+			</pattern>
+
+			<pattern id="plan5s1fill" x="10" y="10" width="20" height="20" patternUnits="userSpaceOnUse" patternTransform="rotate(45)" >
+			  <circle id="plan5s1fillcircle" cx="10" cy="10" r="1" style="stroke: none; fill: white"/>
+			</pattern>
+			<pattern id="plan5s2fill" x="10" y="10" width="20" height="20" patternUnits="userSpaceOnUse" patternTransform="rotate(45)" >
+			  <circle id="plan5s2fillcircle" cx="10" cy="10" r="1" style="stroke: none; fill: white"/>
+			</pattern>
+			<pattern id="plan5s3fill" x="10" y="10" width="20" height="20" patternUnits="userSpaceOnUse" patternTransform="rotate(45)" >
+			  <circle id="plan5s3fillcircle" cx="10" cy="10" r="1" style="stroke: none; fill: white"/>
+			</pattern>
+
+			<pattern id="plan6s1fill" x="10" y="10" width="20" height="20" patternUnits="userSpaceOnUse" patternTransform="rotate(45)" >
+			  <circle id="plan6s1fillcircle" cx="10" cy="10" r="1" style="stroke: none; fill: white"/>
+			</pattern>
+			<pattern id="plan6s2fill" x="10" y="10" width="20" height="20" patternUnits="userSpaceOnUse" patternTransform="rotate(45)" >
+			  <circle id="plan6s2fillcircle" cx="10" cy="10" r="1" style="stroke: none; fill: white"/>
+			</pattern>
+			<pattern id="plan6s3fill" x="10" y="10" width="20" height="20" patternUnits="userSpaceOnUse" patternTransform="rotate(45)" >
+			  <circle id="plan6s3fillcircle" cx="10" cy="10" r="1" style="stroke: none; fill: white"/>
+			</pattern>
+
+			<pattern id="plan7s1fill" x="10" y="10" width="20" height="20" patternUnits="userSpaceOnUse" patternTransform="rotate(45)" >
+			  <circle id="plan7s1fillcircle" cx="10" cy="10" r="1" style="stroke: none; fill: white"/>
+			</pattern>
+			<pattern id="plan7s2fill" x="10" y="10" width="20" height="20" patternUnits="userSpaceOnUse" patternTransform="rotate(45)" >
+			  <circle id="plan7s2fillcircle" cx="10" cy="10" r="1" style="stroke: none; fill: white"/>
+			</pattern>
+			<pattern id="plan7s3fill" x="10" y="10" width="20" height="20" patternUnits="userSpaceOnUse" patternTransform="rotate(45)" >
+			  <circle id="plan7s3fillcircle" cx="10" cy="10" r="1" style="stroke: none; fill: white"/>
+			</pattern>
+
+		</defs>

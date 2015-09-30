@@ -74,17 +74,24 @@
                             lightness = values[key];
                             // Compute identifiers for polygons (and error messages)
                             // Note the _2_ is some artefact of AI exporting to SVG that we don't understand.
-							var key_3d = "#threed" + key + "_2_";
-							var key_plan = "#plan" + key + "_2_";
-							var key_side = "#side" + key + "_1_";
-							var key_swipe = "#swipe" + key + "_2_";
 							
                             // set the resulting lightness of the various polygons whose number
                             // match the dictionary key in the perspective SVG
                             
+							var key_3d = "#threed" + key + "_2_";
                             myget(key_3d).setHSLA(120, 0, lightness*100, 1.0);
-                            myget(key_plan).setHSLA(120, 0, lightness*100, 1.0);
+
+							var key_plan = "#plan" + key + "_2_";
+                            //myget(key_plan).setHSLA(120, 0, lightness*100, 1.0);
+                            var key_pattern = "#plan" + key + "fill";
+                            var key_circle = "#plan" + key + "fillcircle";
+                            myget(key_circle).attr("r", lightness*10);
+                            myget(key_plan).attr("style", "fill: url(" + key_pattern + ")");
+
+							var key_side = "#side" + key + "_1_";
                             myget(key_side).setHSLA(120, 0, lightness*100, lightness);
+
+							var key_swipe = "#swipe" + key + "_2_";
                             myget(key_swipe).setHSLA(120, 0, lightness*100, 1.0);
 
                         }
