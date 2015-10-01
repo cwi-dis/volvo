@@ -1,15 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 17.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" [
-	<!ENTITY ns_extend "http://ns.adobe.com/Extensibility/1.0/">
-	<!ENTITY ns_ai "http://ns.adobe.com/AdobeIllustrator/10.0/">
-	<!ENTITY ns_graphs "http://ns.adobe.com/Graphs/1.0/">
-	<!ENTITY ns_vars "http://ns.adobe.com/Variables/1.0/">
-	<!ENTITY ns_imrep "http://ns.adobe.com/ImageReplacement/1.0/">
-	<!ENTITY ns_sfw "http://ns.adobe.com/SaveForWeb/1.0/">
-	<!ENTITY ns_custom "http://ns.adobe.com/GenericCustomNamespace/1.0/">
-	<!ENTITY ns_adobe_xpath "http://ns.adobe.com/XPath/1.0/">
-]>
 <svg version="1.1" xmlns:x="&ns_extend;" xmlns:i="&ns_ai;" xmlns:graph="&ns_graphs;"
 	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 1600 2903.7"
 	 enable-background="new 0 0 1600 2903.7" xml:space="preserve">
@@ -19,6 +7,82 @@
 		</i:pgfRef>
 	</foreignObject>
 	<g i:extraneous="self">
+		<defs>
+			<pattern id="plan1s1fill" x="10" y="10" width="20" height="20" patternUnits="userSpaceOnUse" patternTransform="rotate(45)" >
+			  <circle id="plan1s1fillcircle" cx="10" cy="10" r="1" style="stroke: none; fill: white"/>
+			</pattern>
+			<pattern id="plan1s2fill" x="10" y="10" width="20" height="20" patternUnits="userSpaceOnUse" patternTransform="rotate(45)" >
+			  <circle id="plan1s2fillcircle" cx="10" cy="10" r="1" style="stroke: none; fill: white"/>
+			</pattern>
+			<pattern id="plan1s3fill" x="10" y="10" width="20" height="20" patternUnits="userSpaceOnUse" patternTransform="rotate(45)" >
+			  <circle id="plan1s3fillcircle" cx="10" cy="10" r="1" style="stroke: none; fill: white"/>
+			</pattern>
+
+			<pattern id="plan2s1fill" x="10" y="10" width="20" height="20" patternUnits="userSpaceOnUse" patternTransform="rotate(45)" >
+			  <circle id="plan2s1fillcircle" cx="10" cy="10" r="1" style="stroke: none; fill: white"/>
+			</pattern>
+			<pattern id="plan2s2fill" x="10" y="10" width="20" height="20" patternUnits="userSpaceOnUse" patternTransform="rotate(45)" >
+			  <circle id="plan2s2fillcircle" cx="10" cy="10" r="1" style="stroke: none; fill: white"/>
+			</pattern>
+			<pattern id="plan2s3fill" x="10" y="10" width="20" height="20" patternUnits="userSpaceOnUse" patternTransform="rotate(45)" >
+			  <circle id="plan2s3fillcircle" cx="10" cy="10" r="1" style="stroke: none; fill: white"/>
+			</pattern>
+
+			<pattern id="plan3s1fill" x="10" y="10" width="20" height="20" patternUnits="userSpaceOnUse" patternTransform="rotate(45)" >
+			  <circle id="plan3s1fillcircle" cx="10" cy="10" r="1" style="stroke: none; fill: white"/>
+			</pattern>
+			<pattern id="plan3s2fill" x="10" y="10" width="20" height="20" patternUnits="userSpaceOnUse" patternTransform="rotate(45)" >
+			  <circle id="plan3s2fillcircle" cx="10" cy="10" r="1" style="stroke: none; fill: white"/>
+			</pattern>
+			<pattern id="plan3s3fill" x="10" y="10" width="20" height="20" patternUnits="userSpaceOnUse" patternTransform="rotate(45)" >
+			  <circle id="plan3s3fillcircle" cx="10" cy="10" r="1" style="stroke: none; fill: white"/>
+			</pattern>
+
+			<pattern id="plan4s1fill" x="10" y="10" width="20" height="20" patternUnits="userSpaceOnUse" patternTransform="rotate(45)" >
+			  <circle id="plan4s1fillcircle" cx="10" cy="10" r="1" style="stroke: none; fill: white"/>
+			</pattern>
+			<pattern id="plan4s2fill" x="10" y="10" width="20" height="20" patternUnits="userSpaceOnUse" patternTransform="rotate(45)" >
+			  <circle id="plan4s2fillcircle" cx="10" cy="10" r="1" style="stroke: none; fill: white"/>
+			</pattern>
+			<pattern id="plan4s3fill" x="10" y="10" width="20" height="20" patternUnits="userSpaceOnUse" patternTransform="rotate(45)" >
+			  <circle id="plan4s3fillcircle" cx="10" cy="10" r="1" style="stroke: none; fill: white"/>
+			</pattern>
+
+			<pattern id="plan5s1fill" x="10" y="10" width="20" height="20" patternUnits="userSpaceOnUse" patternTransform="rotate(45)" >
+			  <circle id="plan5s1fillcircle" cx="10" cy="10" r="1" style="stroke: none; fill: white"/>
+			</pattern>
+			<pattern id="plan5s2fill" x="10" y="10" width="20" height="20" patternUnits="userSpaceOnUse" patternTransform="rotate(45)" >
+			  <circle id="plan5s2fillcircle" cx="10" cy="10" r="1" style="stroke: none; fill: white"/>
+			</pattern>
+			<pattern id="plan5s3fill" x="10" y="10" width="20" height="20" patternUnits="userSpaceOnUse" patternTransform="rotate(45)" >
+			  <circle id="plan5s3fillcircle" cx="10" cy="10" r="1" style="stroke: none; fill: white"/>
+			</pattern>
+
+			<pattern id="plan6s1fill" x="10" y="10" width="20" height="20" patternUnits="userSpaceOnUse" patternTransform="rotate(45)" >
+			  <circle id="plan6s1fillcircle" cx="10" cy="10" r="1" style="stroke: none; fill: white"/>
+			</pattern>
+			<pattern id="plan6s2fill" x="10" y="10" width="20" height="20" patternUnits="userSpaceOnUse" patternTransform="rotate(45)" >
+			  <circle id="plan6s2fillcircle" cx="10" cy="10" r="1" style="stroke: none; fill: white"/>
+			</pattern>
+			<pattern id="plan6s3fill" x="10" y="10" width="20" height="20" patternUnits="userSpaceOnUse" patternTransform="rotate(45)" >
+			  <circle id="plan6s3fillcircle" cx="10" cy="10" r="1" style="stroke: none; fill: white"/>
+			</pattern>
+
+			<pattern id="plan7s1fill" x="10" y="10" width="20" height="20" patternUnits="userSpaceOnUse" patternTransform="rotate(45)" >
+			  <circle id="plan7s1fillcircle" cx="10" cy="10" r="1" style="stroke: none; fill: white"/>
+			</pattern>
+			<pattern id="plan7s2fill" x="10" y="10" width="20" height="20" patternUnits="userSpaceOnUse" patternTransform="rotate(45)" >
+			  <circle id="plan7s2fillcircle" cx="10" cy="10" r="1" style="stroke: none; fill: white"/>
+			</pattern>
+			<pattern id="plan7s3fill" x="10" y="10" width="20" height="20" patternUnits="userSpaceOnUse" patternTransform="rotate(45)" >
+			  <circle id="plan7s3fillcircle" cx="10" cy="10" r="1" style="stroke: none; fill: white"/>
+			</pattern>
+
+			<pattern id="handfill" x="10" y="10" width="20" height="20" patternUnits="userSpaceOnUse" patternTransform="rotate(45)" >
+			  <circle id="handfillcircle" cx="10" cy="10" r="1" style="stroke: none; fill: white"/>
+			</pattern>
+
+		</defs>
 		<g id="background">
 			<rect width="1600" height="2907.7"/>
 		</g>
@@ -11391,21 +11455,21 @@ de6//9k=" transform="matrix(0.3241 0 0 0.3241 1063.4225 2564.1724)">
 				344.9,2374.2 313.4,2392.4 			"/>
 		</g>
 		<g id="Swipe_x5F_Touch">
-			<polygon id="swipe9_2_" fill="#FFFFFF" points="313.4,2463.4 335.8,2450.4 335.8,2424.6 361.6,2409.7 361.6,2383.8 344.9,2374.2 
+			<polygon id="swipe9s9_2_" fill="#FFFFFF" points="313.4,2463.4 335.8,2450.4 335.8,2424.6 361.6,2409.7 361.6,2383.8 344.9,2374.2 
 				313.4,2392.4 313.4,2411.6 291,2424.6 291,2450.4 			"/>
-			<polygon id="swipe8_2_" fill="#FFFFFF" points="291,2528 274.4,2518.4 274.4,2460 291,2450.4 313.4,2463.4 313.4,2515.1 			"/>
-			<polygon id="swipe7_2_" fill="#FFFFFF" points="313.4,2566.8 313.4,2566.8 291,2553.9 291,2528 313.4,2515.1 335.8,2528 
+			<polygon id="swipe9s8_2_" fill="#FFFFFF" points="291,2528 274.4,2518.4 274.4,2460 291,2450.4 313.4,2463.4 313.4,2515.1 			"/>
+			<polygon id="swipe9s7_2_" fill="#FFFFFF" points="313.4,2566.8 313.4,2566.8 291,2553.9 291,2528 313.4,2515.1 335.8,2528 
 				335.8,2553.9 			"/>
-			<polygon id="swipe6_2_" fill="#FFFFFF" points="380.6,2579.7 335.8,2553.9 335.8,2553.9 313.4,2566.8 313.4,2566.8 313.4,2586 
+			<polygon id="swipe9s6_2_" fill="#FFFFFF" points="380.6,2579.7 335.8,2553.9 335.8,2553.9 313.4,2566.8 313.4,2566.8 313.4,2586 
 				363.9,2615.2 380.6,2605.6 			"/>
-			<polygon id="swipe5_2_" fill="#FFFFFF" points="380.6,2605.6 403,2618.5 425.4,2605.6 425.4,2579.7 403,2566.8 380.6,2579.7 			
+			<polygon id="swipe9s5_2_" fill="#FFFFFF" points="380.6,2605.6 403,2618.5 425.4,2605.6 425.4,2579.7 403,2566.8 380.6,2579.7 			
 				"/>
-			<polygon id="swipe4_2_" fill="#FFFFFF" points="425.4,2579.7 470.2,2553.9 470.2,2553.9 492.6,2566.8 492.6,2566.8 492.6,2586 
+			<polygon id="swipe9s4_2_" fill="#FFFFFF" points="425.4,2579.7 470.2,2553.9 470.2,2553.9 492.6,2566.8 492.6,2566.8 492.6,2586 
 				442,2615.2 425.4,2605.6 			"/>
-			<polygon id="swipe3_2_" fill="#FFFFFF" points="492.6,2566.8 492.6,2566.8 515,2553.9 515,2528 492.6,2515.1 470.2,2528 
+			<polygon id="swipe9s3_2_" fill="#FFFFFF" points="492.6,2566.8 492.6,2566.8 515,2553.9 515,2528 492.6,2515.1 470.2,2528 
 				470.2,2553.9 			"/>
-			<polygon id="swipe2_2_" fill="#FFFFFF" points="515,2528 531.6,2518.4 531.6,2460 515,2450.4 492.6,2463.4 492.6,2515.1 			"/>
-			<polygon id="swipe1_2_" fill="#FFFFFF" points="492.6,2463.4 470.2,2450.4 470.2,2424.6 444.4,2409.7 444.4,2383.8 461,2374.2 
+			<polygon id="swipe9s2_2_" fill="#FFFFFF" points="515,2528 531.6,2518.4 531.6,2460 515,2450.4 492.6,2463.4 492.6,2515.1 			"/>
+			<polygon id="swipe9s1_2_" fill="#FFFFFF" points="492.6,2463.4 470.2,2450.4 470.2,2424.6 444.4,2409.7 444.4,2383.8 461,2374.2 
 				492.6,2392.4 492.6,2411.6 515,2424.6 515,2450.4 			"/>
 		</g>
 	</g>
