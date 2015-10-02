@@ -1,14 +1,22 @@
 To build the hardware see jeenode/readme.txt and the hardware folder.
 
 To change the visualisation see server/public (which has the HTML files,
-SVG files and JavaScripts).
+SVG files and JavaScripts). For new artwork see ../artwork/readme.txt.
+
+To run the software on a new machine for the first time see server/README.md.
+
+To test things there are scripts runserver.sh, runreceiver.sh and runvisualisation.sh
+here, and an overall script run.sh that tries to start everything.
+
+
+
 
 The rest of these instructions are for using karnemelk (the white MacBook)
 and the byBorre user (as it has been prepared for the Volvo presentation).
 
 To assemble the system and configure the display for the first time:
 
- - Assembling the table, connect the jeenodes, power it up.
+ - Assemble the table, connect the jeenodes, power it up.
  
  - attach the VGA dongle and big screen to karnemelk
  
