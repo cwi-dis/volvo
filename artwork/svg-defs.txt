@@ -69,4 +69,8 @@
 			  <circle id="plan7s3fillcircle" cx="10" cy="10" r="1" style="stroke: none; fill: white"/>
 			</pattern>
 
+			<pattern id="handfill" x="10" y="10" width="20" height="20" patternUnits="userSpaceOnUse" patternTransform="rotate(45)" >
+			  <circle id="handfillcircle" cx="10" cy="10" r="1" style="stroke: none; fill: white"/>
+			</pattern>
+
 		</defs>
