@@ -12,7 +12,10 @@ here, and an overall script run.sh that tries to start everything.
 ===========================
 
 This set of instructions (in progress) is for using the Raspberry Pi 2.
-Below are the old Karnemelk instructions.
+(Below this section are the old Karnemelk instructions.)
+
+There is an diskimage file for this system, on maunakea, PampusMedia/Special Disk Images.
+
 
 To assemble the system and configure the display for the first time:
 
