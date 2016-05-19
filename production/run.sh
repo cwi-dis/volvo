@@ -7,6 +7,7 @@ killall node
 killall npm
 killall chromium-browser
 
+sh $dirname/tunneltoflauwte.sh &
 sh $dirname/runserver.sh > /home/pi/log.runserver.log 2>&1 &
 sleep 10
 sh $dirname/runvisualisation.sh > /home/pi/log.runvisualisation.log 2>&1 &
