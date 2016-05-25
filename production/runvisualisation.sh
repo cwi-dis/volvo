@@ -8,4 +8,4 @@ Linux)
 	;;
 esac
 URL="http://localhost:8080"
-exec "$BROWSER" --incognito --start-fullscreen "$URL"
+exec "$BROWSER" --incognito --temp-profile --start-fullscreen "$URL"
