@@ -8,4 +8,5 @@ Linux)
 	;;
 esac
 URL="http://localhost:8080"
+rm -f ~/.config/chromium/SingletonLock ~/.config/chromium/SingletonCookie
 exec "$BROWSER" --incognito --temp-profile --start-fullscreen "$URL"
