@@ -49,7 +49,7 @@
 			function feed() {
 				var now = Date.now() / 1000;
 				console.log("feed at ", now);
-				if (now > lastAlive + 5) {
+				if (now > lastAlive + 60) {
 					lastAlive = now;
 					$.ajax({
 						type:"PUT",
@@ -63,9 +63,10 @@
 					})
 				}
 			}
+			return { feed: feed };
 		}
 		
-		var keepalive = Keep_Alive();
+		var keepalive = new Keep_Alive();
 
         // wait until DOM is loaded, then call function
         $(document).ready(function () {
