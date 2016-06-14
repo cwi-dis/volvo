@@ -1,8 +1,8 @@
 <?xml version="1.0" ?><data>
 	<sensors>
-	<volvoVisualisation><lastSeen>1464763358.596</lastSeen></volvoVisualisation></sensors>
+	<volvoVisualisation><lastSeen>1465909529.958</lastSeen></volvoVisualisation></sensors>
 	<devices>
-	<homeServer><url>http://volvo.local:9090/data</url><host>volvo.local</host><port>9090</port><startTime>1464780640</startTime></homeServer></devices>
+	<homeServer><url>http://volvo.local:9090/data</url><host>volvo.local</host><port>9090</port><startTime>1465913870</startTime></homeServer></devices>
 	<people>
 		<unknown>
 		</unknown>
@@ -20,11 +20,11 @@
 			<minInterval>60</minInterval>
 			<url>/internal/save</url>
 			<xpath>/data/plugindata//* | /data/actions/* | /data/triggers/* | /data/identities//* | /data/sandbox/*</xpath>
-		<notBefore>1464780700</notBefore></action>
+		<notBefore>1465914717</notBefore></action>
 		<action>
 			<xpath>/data/actions/*</xpath>
 			<url>/internal/updateActions</url>
-		</action>
+		<notBefore>1465909533</notBefore></action>
         <action>
             <name>cleanup</name>
             <method>DELETE</method>
@@ -33,14 +33,35 @@
 	    <action>
 	        <name>start</name>
 	        <url>/internal/started</url>
-	    <notBefore>1464780640</notBefore></action>
-	</actions>
+	    <notBefore>1465913876</notBefore></action>
+	<action>
+            <xpath>/data/devices/homeServer/startTime</xpath>
+            <url>/data/environment/volvo/mostRecentReboot</url>
+            <method>PUT</method>
+            <mimetype>text/plain</mimetype>
+            <data>{igor_dateTime(.)}</data>
+        <notBefore>1465914403</notBefore></action><action>
+            <xpath>/data/sensors/volvoVisualisation/lastSeen</xpath>
+            <url>/data/environment/volvo/mostRecentActivity</url>
+            <method>PUT</method>
+            <mimetype>text/plain</mimetype>
+            <data>{igor_dateTime(.)}</data>
+        <notBefore>1465909530</notBefore></action><action>
+            <name>start</name>
+            <url>/plugin/watchdog?timeout={/data/plugindata/watchdog/timeout}</url>
+        <notBefore>1465913876</notBefore></action><action>
+            <xpath>/data/sensors/volvoVisualisation/lastSeen</xpath>
+            <url>/plugin/watchdog</url>
+        </action></actions>
 	<sandbox>
 	</sandbox>
 	<environment>
-	</environment>
+	<volvo><mostRecentActivity>2016-06-14T15:05:29.958000</mostRecentActivity><mostRecentReboot>2016-06-14T15:07:24</mostRecentReboot></volvo></environment>
 	<eventsources>
 	</eventsources>
 	<plugindata>
-	</plugindata>
+	<watchdog>
+            
+            <timeout>600</timeout>
+        <food>2016-06-14T15:05:29.958000</food></watchdog></plugindata>
 </data>
