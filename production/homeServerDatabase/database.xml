@@ -2,7 +2,7 @@
 	<sensors>
 	<volvoVisualisation><lastSeen>1465909529.958</lastSeen></volvoVisualisation></sensors>
 	<devices>
-	<homeServer><url>http://volvo.local:9090/data</url><host>volvo.local</host><port>9090</port><startTime>1465913870</startTime></homeServer></devices>
+	<homeServer><url>http://volvo.local:9090/data</url><host>volvo.local</host><port>9090</port><startTime>1465915108</startTime></homeServer></devices>
 	<people>
 		<unknown>
 		</unknown>
@@ -20,7 +20,7 @@
 			<minInterval>60</minInterval>
 			<url>/internal/save</url>
 			<xpath>/data/plugindata//* | /data/actions/* | /data/triggers/* | /data/identities//* | /data/sandbox/*</xpath>
-		<notBefore>1465914717</notBefore></action>
+		<notBefore>1465915168</notBefore></action>
 		<action>
 			<xpath>/data/actions/*</xpath>
 			<url>/internal/updateActions</url>
@@ -40,7 +40,7 @@
             <method>PUT</method>
             <mimetype>text/plain</mimetype>
             <data>{igor_dateTime(.)}</data>
-        <notBefore>1465914403</notBefore></action><action>
+        <notBefore>1465915109</notBefore></action><action>
             <xpath>/data/sensors/volvoVisualisation/lastSeen</xpath>
             <url>/data/environment/volvo/mostRecentActivity</url>
             <method>PUT</method>
