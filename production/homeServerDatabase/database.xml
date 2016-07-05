@@ -1,8 +1,8 @@
 <?xml version="1.0" ?><data>
 	<sensors>
-	<volvoVisualisation><lastSeen>1465909529.958</lastSeen></volvoVisualisation></sensors>
+	<volvoVisualisation><lastSeen>1467726981.172</lastSeen></volvoVisualisation></sensors>
 	<devices>
-	<homeServer><url>http://volvo.local:9090/data</url><host>volvo.local</host><port>9090</port><startTime>1465915922</startTime></homeServer></devices>
+	<homeServer><url>http://volvo.local:9090/data</url><host>volvo.local</host><port>9090</port><startTime>1467728240</startTime></homeServer></devices>
 	<people>
 		<unknown>
 		</unknown>
@@ -20,7 +20,7 @@
 			<minInterval>60</minInterval>
 			<url>/internal/save</url>
 			<xpath>/data/plugindata//* | /data/actions/* | /data/triggers/* | /data/identities//* | /data/sandbox/*</xpath>
-		<notBefore>1465915982</notBefore></action>
+		<notBefore>1467729418</notBefore></action>
 		<action>
 			<xpath>/data/actions/*</xpath>
 			<url>/internal/updateActions</url>
@@ -78,8 +78,9 @@
 	<eventsources>
 	</eventsources>
 	<plugindata>
-	<watchdog>
-            
+        <watchdog>
             <timeout>600</timeout>
-        <food>2016-06-14T15:05:29.958000</food></watchdog></plugindata>
+            <food>2016-06-14T15:05:29.958000</food>
+        </watchdog>
+    </plugindata>
 </data>
