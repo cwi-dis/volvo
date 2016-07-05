@@ -16,23 +16,23 @@
             <data>{igor_dateTime(.)}</data>
         </action>
         <action>
-            <xpath>/data/sensors/volvoVisualisation/lastSeen</xpath>
-            <url>/data/plugindata/watchdog/food</url>
-            <method>PUT</method>
-            <mimetype>text/plain</mimetype>
-            <data>{igor_dateTime(.)}</data>
-        </action>
-        <action>
             <xpath>/data/devices/homeServer/startTime</xpath>
             <url>/data/environment/volvo/mostRecentReboot</url>
             <method>PUT</method>
             <mimetype>text/plain</mimetype>
             <data>{igor_dateTime(.)}</data>
         </action>
+        <action>
+            <name>start</name>
+            <url>/plugin/watchdog?timeout={/data/plugindata/watchdog/timeout}</url>
+        </action>
+        <action>
+            <xpath>/data/sensors/volvoVisualisation/lastSeen</xpath>
+            <url>/plugin/watchdog</url>
+        </action>
     </actions>
     <plugindata>
         <watchdog>
-            <food/>
             <timeout>600</timeout>
         </watchdog>
     </plugindata>

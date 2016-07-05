@@ -34,29 +34,47 @@
 	        <name>start</name>
 	        <url>/internal/started</url>
 	    <notBefore>1465915773</notBefore></action>
-	<action>
+ 		<action>
             <xpath>/data/devices/homeServer/startTime</xpath>
-            <url>/data/environment/volvo/mostRecentReboot</url>
+            <url>/data/environment/introspection/lastActivity/reboot</url>
             <method>PUT</method>
             <mimetype>text/plain</mimetype>
             <data>{igor_dateTime(.)}</data>
-        <notBefore>1465915929</notBefore></action><action>
-            <xpath>/data/sensors/volvoVisualisation/lastSeen</xpath>
-            <url>/data/environment/volvo/mostRecentActivity</url>
+		</action>
+		<action>
+            <xpath>/data/devices/homeServer/startTime</xpath>
+            <url>/data/environment/introspection/rebootCount</url>
+            <method>PUT</method>
+            <mimetype>text/plain</mimetype>
+            <data>{number(/data/environment/introspection/rebootCount)+1}</data>
+		</action>
+		<action>
+           <xpath>/data/sensors/volvoVisualisation/lastSeen</xpath>
+            <url>/data/environment/introspection/lastActivity/volvo</url>
             <method>PUT</method>
             <mimetype>text/plain</mimetype>
             <data>{igor_dateTime(.)}</data>
-        <notBefore>1465909530</notBefore></action><action>
+        </action>
+        <action>
             <name>start</name>
             <url>/plugin/watchdog?timeout={/data/plugindata/watchdog/timeout}</url>
-        <notBefore>1465915773</notBefore></action><action>
+        </action>
+        <action>
             <xpath>/data/sensors/volvoVisualisation/lastSeen</xpath>
             <url>/plugin/watchdog</url>
-        </action></actions>
+        </action>
+    </actions>
 	<sandbox>
 	</sandbox>
 	<environment>
-	<volvo><mostRecentActivity>2016-06-14T15:05:29.958000</mostRecentActivity><mostRecentReboot>2016-06-14T16:48:12</mostRecentReboot></volvo></environment>
+        <introspection>
+            <lastActivity>
+                <volvo>2016-06-14T15:05:29.958000</volvo>
+                <reboot>2016-06-14T16:48:12</reboot>
+            </lastActivity>
+            <rebootCount>0</rebootCount>
+        </introspection>
+	</environment>
 	<eventsources>
 	</eventsources>
 	<plugindata>
