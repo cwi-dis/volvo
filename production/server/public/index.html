@@ -53,7 +53,7 @@
 					lastAlive = now;
 					$.ajax({
 						type:"PUT",
-						url:"http://localhost:9090/data/sensors/volvoVisualisation/lastSeen",
+						url:"http://localhost:9333/data/sensors/volvoVisualisation/lastSeen",
 						data:now.toString(),
 						contentType:"text/plain",
 						processData:false
