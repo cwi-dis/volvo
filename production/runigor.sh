@@ -6,3 +6,4 @@ if [ -f $HOME/NO-IGOR ]; then
 	exit 1
 fi
 exec python ../../home/homeServer/homeServer
+exec python ../../../igor/igor/igor -d ../../../igor/databases/igorDatabase.volvo
