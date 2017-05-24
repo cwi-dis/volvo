@@ -1,3 +1,1 @@
-To be able to run this you must first install sensorrelay, from Tom's Mercurial, bitalino/sensorrelay.
-
-Install with "sudo python setup.py install".
+To be able to run this you must first install sensorrelay from <https://github.com/cwi-dis/sensor-relay-py>.

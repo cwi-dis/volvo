@@ -39,15 +39,16 @@ To assemble the system and configure the display for the first time:
 	
  - Install chromium-browser
 	
- - Install igor, and igordatabase.volvo (from DIS github repositories)
+ - Install https://github.com/cwi-dis/igor
+ - Install the igor database into ~/.igor, from https://github.com/cwi-dis/igorDatabase.volvo
  
  - Pull in the Mercurial repository for dis/jack
  - Pull in the Mercurial repository for dis/tom
  
- - Install node.js, instructions at 
- 	https://learn.adafruit.com/node-embedded-development/installing-node-dot-js
+ - Install a recent node.js, instructions at 
+ 	https://nodejs.org/en/download/package-manager/
  	
- - cd ~/src/dis/jack/volvo/production/server; npm install
+ - cd volvo/production/server; npm install
  
  - test the server, npm start (or use the script production/runserver.sh)
  
@@ -56,8 +57,7 @@ To assemble the system and configure the display for the first time:
    
  - Attach the JeeNode dongle. Assert it's at /dev/ttyUSB0
  
- - Install Tom's hooks to connect to the node server
- 	cd ~/src/dis/tom/bitalino/sensorrelay ; sudo python setup.py install
+ - Install <https://github.com/cwi-dis/sensor-relay-py>
  	
  - Run the receiver with runreceiver.sh
  
