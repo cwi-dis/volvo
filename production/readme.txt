@@ -37,9 +37,10 @@ To assemble the system and configure the display for the first time:
 	@xset s off 
 	@xset -dpms
 	
- - Install chromium. As of march 2016 instructions canbe found at
-	https://www.raspberrypi.org/forums/viewtopic.php?f=63&t=121195&p=823770
+ - Install chromium-browser
 	
+ - Install igor, and igordatabase.volvo (from DIS github repositories)
+ 
  - Pull in the Mercurial repository for dis/jack
  - Pull in the Mercurial repository for dis/tom
  
