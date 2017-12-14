@@ -12,6 +12,7 @@ sleep 10
 sh $dirname/runvisualisation.sh > /home/pi/log.runvisualisation.log 2>&1 &
 xset s noblank
 xset s off
-xset -dpms
+xset dpms 0 0 0
+xset dpms force on
 sleep 60
 sh $dirname/runreceiver.sh >/home/pi/log.runreceiver.log 2>&1 &
