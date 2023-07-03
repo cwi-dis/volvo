@@ -18,7 +18,7 @@ You should have the following parts before you start:
 - Ethernet connection
 
 
-Here is a quick walkthrough video of the hardware in operation: [VolvoHardwareWalkthrough.mov](VolvoHardwareWalkthrough.mov)
+Here is a quick walkthrough video of the hardware in operation: [VolvoHardwareWalkthrough.mp4](VolvoHardwareWalkthrough.mp4)
 
 (visit the website, above, if you cannot see this video).
 
