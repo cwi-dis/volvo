@@ -40,9 +40,9 @@ If you have all the components listed above: skip this section, try the "putting
 
 If you have the 16GB Flash card and it works: you should be all set. But the card will probably die in a few years.
 
-If you need to re-create the flash: get a 16GB Flash card and copy the file `rpi2-byBorreVolvo-20180626-image.dd` to it **verbatim**. I.e. do a raw copy.
+If you need to re-create the flash: get a 16GB Flash card and copy the file `rpi2-byBorreVolvo-20230703-image.dd` to it **verbatim**. I.e. do a raw copy.
 
-You need to download this file from the _Releases_ section from the github webpage for this project.
+To get this image: contact the DIS group at Centrum voor Wiskunde & Informatica. It is located on the archival disk `DisArch2021` in `Special Disk Images`.
 
 Something like `dd` to the raw device will work on MacOS or Linux (after you find the correct NNN in the command below, using `diskutil list`). Get a Linux or MacOS geek to help you with these steps.
 
