@@ -22,7 +22,7 @@ Here is a quick walkthrough video of the hardware in operation: [VolvoHardwareWa
 
 (visit the website, above, if you cannot see this video).
 
-## Table reconstruction
+## Table reconstruction (old)
 
 The table legs can come off, and the table can be split into three parts. If that has happened you need to put it together again. If the table has been split into three parts you will also need to re-connect to power distribution to all of the sensors boards. Hopefully things have been clearly labeled.
 
@@ -31,6 +31,41 @@ Here is a picture of the table from below. It may give you an idea on how to re-
 ![table](VolvoTableStructure.jpg)
 
 Connect the table to its power supply and plug it in. It _may_ be possible to see some of the indicator lights on the sensor boards light up, if you peek under the touch surfaces.
+
+
+## Table Reconstruction (July 2023)
+
+It turns out we had to take the table apart. Here is a picture of the bits you need to find:
+
+![01-TableApart.jpg](01-TableApart.jpg)
+
+First you need to connect the three parts of the table floor, using the provided bolts. Here is a picture of the first two parts connected. Notice the marker "1" on both the table floor piece and base. You need to align these.
+
+![02-TableBase.jpg](02-TableBase.jpg)
+
+After connecting the third part of the table floor affix it to the base using the screws. Now you can attach the three pieces of the table rim. It should now look like this:
+
+![03-TableBaseComplete.jpg](03-TableBaseComplete.jpg)
+
+Connect the power routing. From the central power distribution board there are red/black wires to every sensor controller board. Check the picture above (or one of the ones below) for how to connect.
+
+Next you need to reconstruct the top cover. Lay it upside-down on the floor. Insert all the rods. Start inserting the rods into the table from the middle: the light grey tiles that have no sensors.
+
+Attach the sensors in the tiles to the sensor controller boards. Here is a picture of the volume tile  connection (right side of the table):
+
+![04-SensorConnections1.jpg](04-SensorConnections1.jpg)
+
+And a picture of the hand tile connection:
+
+![04-SensorConnections2.jpg](04-SensorConnections2.jpg)
+
+Here is a picture of the sensor tile connections on the left hand side of the table:
+
+![05-SensorConnections3.jpg](05-SensorConnections3.jpg)
+
+There are a number of other pictures in this folder (on github), check them out if things are unclear.
+
+Next connect the power supply and hope for the best.
 
 ## Raspberry PI re-creation
 
